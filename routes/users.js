@@ -86,6 +86,10 @@ router.get('/insertUser', (req, res) => {
   })
 })
 
+router.post('/insertUserAction', (req, res) => {
+  res.json(req.body)
+})
+
 function doquery(query, data) {
   return new Promise(function (resolve, reject) {
     connection.query(query, data, function (err, output) {
