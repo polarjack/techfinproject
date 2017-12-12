@@ -5,26 +5,111 @@
 </head>
 
 <body>
-    <div calss="container">
-        <h4>Travel To Anywhere, CheckIn With SmartLock</h4>
+    <div class="container">
+        <h4>Travel ,CheckIn With SmartLock</h4>
+        <br>
+        <div class="row right">
+            <button class="btn">成為房東</button>
+            <button class="btn">我的租屋資訊</button>
+        </div>
+        <div class="row">
+            <div class="col s12 m6">
+                <ul class="tabs">
+                    <li class="tab">
+                        <a class="active" href="#test1">
+                            <span class="black-text">長租</span>
+                        </a>
+                    </li>
+                    <li class="tab ">
+                        <a href="#test2">
+                            <span class="black-text">短租</span>
+                        </a>
+                    </li>
 
-        <button class="btn">長租</button>
-        <button class="btn">短租</button>
-        <ul id="tabs-swipe-demo" class="tabs">
-            <li class="tab col s3">
-                <a href="#test-swipe-1">Test 1</a>
-            </li>
-            <li class="tab col s3">
-                <a class="active" href="#test-swipe-2">Test 2</a>
-            </li>
-            <li class="tab col s3">
-                <a href="#test-swipe-3">Test 3</a>
-            </li>
-        </ul>
-        <div id="test-swipe-1" class="col s12 blue">Test 1</div>
-        <div id="test-swipe-2" class="col s12 red">Test 2</div>
-        <div id="test-swipe-3" class="col s12 green">Test 3</div>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: -20px">
+            <div id="test1" class="col s12 m6">
+                <div class="card-panel" style="max-height: 300px;">
+                    <div class="container">
+                        <input type="text" placeholder="Destination">
+                        <div class="row">
+                            <div class="col s6">
+                                <input type="text" class="datepicker" placeholder="Start Date">
+                            </div>
+                            <div class="col s6">
+                                <input type="text" class="datepicker" placeholder="End Date">
+                            </div>
+                        </div>
+                        <input type="text" placeholder="People">
+                    </div>
+                </div>
+            </div>
+            <div id="test2" class="col s12 m6">
+                <div class="card-panel" style="max-height: 230px;">
+                    <div class="container">
+                        <input type="text" placeholder="Destination">
+                        <div class="row">
+                            <div class="col s6">
+                                <input type="text" class="datepicker" placeholder="Start Date">
+                            </div>
+                            <div class="col s6">
+                                <input type="text" class="datepicker" placeholder="End Date">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s6">
+                                <input type="text" placeholder="Adults">
+                            </div>
+                            <div class="col s6">
+                                <input type="text" placeholder="Childern">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m6">
+                <iframe width="100%" height="50%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJSS8sRXmqQjQRB_U7jlAHjZ4&key=AIzaSyB8EOYSeapXPxvqNyJX-Dt85WlfxPvLiFo"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <h4>Rooms</h4>
+        <div class="row">
+
+            <% for(var i = 0; i < 20; i++) { %>
+            <div class="col s6 m3">
+                <a href="#">
+                    <div class="card hoverable">
+                        <div class="card-image">
+                            <img src="/images/travel.jpeg">
+                        </div>
+                        <div class="card-content">
+                            <span>type</span><br>
+                            <span class="activator grey-text text-darken-4">sweet home</span><br>
+                            <span>Price</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <% } %>
     </div>
 </body>
+
+<script>
+    //for tabs
+    $(document).ready(function () {
+        // for tabs must
+        $('.tabs').tabs();
+
+        // for datapicker must
+        $('.datepicker').datepicker();
+    });
+</script>
 
 </html>
