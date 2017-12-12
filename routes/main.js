@@ -11,13 +11,12 @@ router.get('/intro', function(req, res) {
 })
 
 router.get('/travel', function(req, res) {
-  res.send("travel")
+  res.render('main/travel', {title: "travel"})
 })
 
 router.get('/host', function(req, res) {
   res.send("host")
 })
-
 
 
 module.exports = router;
