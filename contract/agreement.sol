@@ -5,6 +5,7 @@ contract Agreement {
     address public host = 0x0;
     address public item = 0x0;
     uint public initblock;
+    
     function Agreement() {
         
     }
