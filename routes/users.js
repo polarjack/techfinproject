@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var connection = require('../config/dbconfig');
-var Promise = require('promise');
-var jwt = require('express-jwt');
+var doquery = require('../config/dbconfig');
+// var Promise = require('promise');
+var newAccount = require('../config/newAccount');
+
 
 
 /* GET users listing. */
@@ -15,7 +16,6 @@ router.get('/userList', (req, res) => {
   const todo = doquery(query, "");
 
   todo.then(input => {
-
     console.log(input)
     res.render('userlist', {
       title: "user list",
@@ -87,20 +87,39 @@ router.get('/insertUser', (req, res) => {
 })
 
 router.post('/insertUserAction', (req, res) => {
-  res.json(req.body)
+  var ethinfo = newAccount(req.body.password);
+
+  console.log(ethinfo.address);
+  console.log(ethinfo.privateKey);
+
+  var dbinput = {
+    name: req.body.name,
+    password: req.body.password,
+    email: req.body.email,
+    address: ethinfo.address,
+    privateKey: ethinfo.privateKey
+  }
+
+  const todo = doquery("insert into users set ?", dbinput, function(err) {
+    if(err) throw err;  
+  })
+
+  todo.then(input => {
+    console.log(input);
+    res.redirect('/users/userlist');
+  }).catch(input => {
+    console.log(input);
+    res.redirect('/users/insertuser');
+  })
 })
 
-function doquery(query, data) {
-  return new Promise(function (resolve, reject) {
-    connection.query(query, data, function (err, output) {
-      if (err) {
-        console.log(err);
-        return reject(err);
-      }
-      resolve(output);
-    });
-  });
-}
+router.get('/generateaccount', (req, res) => {
+
+})
+
+
+
+
 
 
 
