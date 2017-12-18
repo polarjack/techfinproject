@@ -2,8 +2,7 @@ var express = require('express');
 var router = express.Router();
 var doquery = require('../config/dbconfig');
 // var Promise = require('promise');
-var newAccount = require('../config/newAccount');
-
+var newAccount = require('../contract/newAccount');
 
 
 /* GET users listing. */

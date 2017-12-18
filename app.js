@@ -12,6 +12,7 @@ var users = require('./routes/users');
 var main = require('./routes/main');
 var items = require('./routes/items');
 var agreement = require('./routes/agreement');
+var contractapi = require('./routes/contractapi');
 
 var app = express();
 var port = 3000
@@ -44,7 +45,7 @@ app.use('/users', users);
 app.use('/main', main);
 app.use('/items', items);
 app.use('/agreement', agreement);
-
+app.use('/contractapi', contractapi);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

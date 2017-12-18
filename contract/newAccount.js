@@ -7,5 +7,4 @@ function newAccount(input) {
   return accounts.create(input)
 }
 
-
 module.exports = newAccount
