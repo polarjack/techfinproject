@@ -1,11 +1,61 @@
 <html>
+
 <head>
   <% include ./../header %>
 </head>
 
 <body>
   <div class="container">
-    
+    <h1>Item List</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>owner</th>
+          <th>location</th>
+          <th>chain_address</th>
+          <th>price_permonth</th>
+          <th>start_date</th>
+          <th>end_date</th>
+          <th>status</th>
+          <th>creation_time</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% data.map((i) => { %>
+          <tr>
+            <td>
+              <%= i.id%>
+            </td>
+            <td>
+              <%= i.owner%>
+            </td>
+            <td>
+              <%= i.item_name%>
+            </td>
+            <td>
+              <%= i.location%>
+            </td>
+            <td>
+              <%= i.chain_address%>
+            </td>
+            <td>
+              <%= i.start_date%>
+            </td>
+            <td>
+              <%= i.end_date%>
+            </td>
+            <td>
+              <%= i.status%>
+            </td>
+            <td>
+              <%= i.creation_time%>
+            </td>
+          </tr>
+          <% })%>
+      </tbody>
+    </table>
 
   </div>
 </body>
