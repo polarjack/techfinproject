@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('main/index', { title: 'Main' });
+  res.redirect('intro');
+  // res.render('main/index', { title: 'Main' });
 });
 
 router.get('/intro', function(req, res) {
@@ -14,9 +15,8 @@ router.get('/travel', function(req, res) {
   res.render('main/travel', {title: "travel"})
 })
 
-router.get('/host', function(req, res) {
-  res.send("host")
+router.get('/host', function(req, res) {  
+  res.render('main/host', { title: "host"});
 })
-
 
 module.exports = router;

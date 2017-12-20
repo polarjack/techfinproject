@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <% include ./header %>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row" id="app">
+      <div class="col s12">
+        <div class="card-panel">
+            <img v-bind:src="imageLink" alt="" v-on:click="changeLink">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      imageLink: "/svg/lock.svg"
+    },
+    methods: {
+      changeLink: function() {
+        this.$http.get('/unlockdo').then(function(response) {
+          this.imageLink = "/svg/unlock.svg"
+        })
+        
+        setTimeout(function() { this.imageLink = "/svg/lock.svg" }, 2000);
+      }
+    }
+  })
+</script>
+
+</html>
