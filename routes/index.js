@@ -12,17 +12,16 @@ router.get('/unlock', function(req, res) {
   res.render('unlock', { title: "unlock"})    
 })
 
-router.get('/unlockdo', function(req, res) {
-  http.get({
-    hostname: "192.168.1.129",
-    port: "8080",
-    path: "/unlock"
-  }, (res) => {
-    console.log("done");
-  })
-
-  console.log("here inside unlockdo");
-  res.send("done")
-})
+// router.get('/unlockdo', function(req, res) {
+//   http.get({
+//     hostname: "192.168.1.129",
+//     port: "8080",
+//     path: "/unlock"
+//   }, (res) => {
+//     console.log("done");
+//   })
+//   console.log("here inside unlockdo");
+//   res.send("done")
+// })
 
 module.exports = router;

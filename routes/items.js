@@ -39,9 +39,10 @@ router.post('/insertdo', function(req, res) {
   var data = {
     location: req.body.location,
     item_name: req.body.itemName,
+    people_available: req.body.peopleAvailable,
     start_date: start_date,
     end_date: end_date,
-    price_permonth: req.body.pricePerMonth
+    price_perday: req.body.pricePerDay
   }
   console.log(end_date - start_date)
 
