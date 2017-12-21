@@ -1,26 +1,36 @@
 <html>
 
 <head>
-    <title>
-        <%= title %>
-    </title>
-
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.2/js/materialize.min.js"></script>
+  <% include ./header %>
 </head>
 
 <body>
+  <% include ./navbar %>
     <div class="container">
-        <h1>User Login</h1>
-        <form action="verify" method="post">
-            <input type="email" name="email" placeholder="Please input your email">account
-            <input type="password" name="password" placeholder="password">password
-            <br>
-            <button class="btn waves-effect waves-light right" type="submit">Login</button>
-        </form>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="center">Login</h3>
+          <div class="card-panel">
+            <form action="verify" method="post">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input type="email" name="email" placeholder="Please input your email">
+                  <label for="email"></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input type="password" name="password" placeholder="password">
+                  <label for="password">Password</label>
+                </div>
+              </div>
+              <div class="row">
+                <button class="btn waves-effect waves-light right" type="submit">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 </body>
 

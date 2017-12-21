@@ -26,38 +26,38 @@ router.get('/userList', (req, res) => {
   })
 })
 
-router.get('/login', (req, res) => {
-  res.render("userlogin", {
-    title: "userlogin"
-  })
-})
+// router.get('/login', (req, res) => {
+//   res.render("userlogin", {
+//     title: "userlogin"
+//   })
+// })
 
-router.post('/verify', (req, res) => {
-  console.log(req.body)
-  const todo = doquery("select * from users where email = ? && password = ?", [req.body.email, req.body.password])
+// router.post('/verify', (req, res) => {
+//   console.log(req.body)
+//   const todo = doquery("select * from users where email = ? && password = ?", [req.body.email, req.body.password])
 
-  todo.then(input => {
-    console.log(input)
+//   todo.then(input => {
+//     console.log(input)
     
-    //express-session setting
-    if(input.length > 0) {
-      req.session.user_id = input[0].id
-      req.session.name = input[0].name
-      req.session.email = input[0].email
+//     //express-session setting
+//     if(input.length > 0) {
+//       req.session.user_id = input[0].id
+//       req.session.name = input[0].name
+//       req.session.email = input[0].email
 
-      res.json("success")
-    }
-    else {
-      res.redirect('/users/login')
-    }
+//       res.json("success")
+//     }
+//     else {
+//       res.redirect('/users/login')
+//     }
 
-  }).catch(input => {
-    console.log(input)
-    res.redirect('/users/login')
-    res.json("error")
-  })
+//   }).catch(input => {
+//     console.log(input)
+//     res.redirect('/users/login')
+//     res.json("error")
+//   })
 
-})
+// })
 
 router.get('/showyourself', (req, res) => {
 
