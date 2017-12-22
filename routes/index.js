@@ -47,10 +47,14 @@ router.post('/verify', (req, res) => {
 })
 
 router.get('/intro', function(req, res) {
-  res.render('main/intro', { 
+  res.render('intro', { 
     title: 'Intro',
     login: ''
   })
+})
+
+router.get('/host', function(req, res) {
+  res.redirect('main/host');
 })
 
 router.get('/showsession', function(req, res) {
