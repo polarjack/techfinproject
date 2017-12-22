@@ -1,6 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
+
+router.use('/', function (req, res, next) {
+  if(req.session.login != "hidden") {
+    res.redirect('../login')
+  }
+  else {
+    next()
+  }
+});
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.redirect('intro');
@@ -9,20 +19,22 @@ router.get('/', function (req, res, next) {
 
 router.get('/intro', function (req, res) {
   res.render('main/intro', {
-    title: 'Intro'
+    title: 'Intro',
+    login: req.session.login
   })
 })
 
 router.get('/travel', function (req, res) {
   res.render('main/travel', {
-    title: "travel"
+    title: "travel",
+    login: req.session.login
   })
 })
 
 router.get('/host', function (req, res) {
   res.render('main/host', {
     title: "host",
-    login: ""
+    login: req.session.login
   });
 })
 

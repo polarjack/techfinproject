@@ -34,6 +34,7 @@ router.post('/verify', (req, res) => {
       req.session.name = input[0].name
       req.session.email = input[0].email
       req.session.user_address = input[0].address
+      req.session.login = "hidden"
       res.redirect('/intro')
     }
     else {
@@ -49,12 +50,16 @@ router.post('/verify', (req, res) => {
 router.get('/intro', function(req, res) {
   res.render('intro', { 
     title: 'Intro',
-    login: ''
+    login: req.session.login
   })
 })
 
 router.get('/host', function(req, res) {
   res.redirect('main/host');
+})
+
+router.get('/travel', function(req, res) {
+  res.redirect('main/travel')
 })
 
 router.get('/showsession', function(req, res) {
