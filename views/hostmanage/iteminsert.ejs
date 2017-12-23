@@ -1,0 +1,61 @@
+<html>
+
+<head>
+  <% include ./../header  %>
+</head>
+
+<body>
+  <% include ./../navbar %>
+
+    <div class="container">
+      <div class="row">
+
+        <h1 class="center">Items Insert</h1>
+        <div class="row card-panel">
+          <form class="col s12" action="iteminsertdo" method="post">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="itemName" name="itemName">
+                <label for="itemName">物件名稱</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="location" name="location">
+                <label for="location">地址</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="pricePerDay" name="pricePerDay">
+                <label for="pricePerDay">價格/每天</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="text" id="startDate" name="startDate" class="datepicker">
+                <label for="startDate">開始時間</label>
+              </div>
+              <div class="input-field col s6">
+                <input type="text" id="endDate" name="endDate" class="datepicker">
+                <label for="endDate">結束時間</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <button class="waves-effect waves-light btn right" type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.datepicker').datepicker();
+  });
+</script>
+
+</html>

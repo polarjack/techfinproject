@@ -25,7 +25,7 @@ router.get('/intro', function (req, res) {
 })
 
 router.get('/travel', function (req, res) {
-  res.render('main/travel', {
+  res.render('travel', {
     title: "travel",
     login: req.session.login
   })

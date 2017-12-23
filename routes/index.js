@@ -55,11 +55,14 @@ router.get('/intro', function(req, res) {
 })
 
 router.get('/host', function(req, res) {
-  res.redirect('main/host');
+  res.redirect('/hostmanage');
 })
 
 router.get('/travel', function(req, res) {
-  res.redirect('main/travel')
+  res.render('travel', {
+    title: "travel",
+    login: req.session.login
+  })
 })
 
 router.get('/showsession', function(req, res) {
