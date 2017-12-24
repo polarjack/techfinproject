@@ -53,7 +53,9 @@ router.get("/showsession", function(req, res) {
 
 router.get('/testweb3', function(req, res) {
   var coinbase = eth.coinbase;
+  var coinbaseBalance = eth.getBalance(coinbase)
   console.log(coinbase)
+  res.send(coinbaseBalance)
 })
 
 module.exports = router;
