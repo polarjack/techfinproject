@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var main = require('./routes/main');
@@ -14,6 +13,7 @@ var items = require('./routes/items');
 var agreement = require('./routes/agreement');
 var contractapi = require('./routes/contractapi');
 var hostmanage = require('./routes/hostmanage');
+var contracttest = require('./routes/contracttest');
 
 var app = express();
 var port = 3000
@@ -48,6 +48,7 @@ app.use('/items', items);
 app.use('/agreement', agreement);
 app.use('/contractapi', contractapi);
 app.use('/hostmanage', hostmanage);
+app.use('/contracttest', contracttest);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

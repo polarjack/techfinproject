@@ -4,7 +4,7 @@ var router = express.Router();
 var doquery = require('../config/dbconfig');
 var Web3 = require('../config/web3');
 var eth = Web3.eth;
-
+// var deployContract = require('')
 
 //middleware
 // router.use("/", function(req, res, next) {
@@ -34,15 +34,19 @@ router.get("/insert", function(req, res) {
 });
 
 router.post('/iteminsertdo', function(req, res) {
+  var user_id = req.session.user_id;
+  var user_address = req.session.user_address;
+
   var data = {
     item_name: req.body.itemName,
     location: req.body.location,
     price_perday: req.body.pricePerDay,
     start_date: req.body.startDate,
     end_date: req.body.endDate,
-    owner: req.session.user_id
+    owner: user_id
   }
   // var todo = doquery("insert into items into ?", data);
+
 
   res.json(req.body);
 })
