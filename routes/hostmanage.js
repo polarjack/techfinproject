@@ -7,13 +7,13 @@ var eth = Web3.eth;
 // var deployContract = require('')
 
 //middleware
-// router.use("/", function(req, res, next) {
-//   if (req.session.login != "hidden") {
-//     res.redirect("../login");
-//   } else {
-//     next();
-//   }
-// });
+router.use("/", function(req, res, next) {
+  if (req.session.login != "hidden") {
+    res.redirect("../login");
+  } else {
+    next();
+  }
+});
 
 router.get("/", function(req, res) {
   res.redirect("/hostmanage/mylist");
@@ -46,9 +46,9 @@ router.post('/iteminsertdo', function(req, res) {
     owner: user_id
   }
   // var todo = doquery("insert into items into ?", data);
+  
 
-
-  res.json(req.body);
+  res.json(data);
 })
 
 router.get("/showsession", function(req, res) {

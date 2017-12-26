@@ -25,4 +25,17 @@ function doquery(query, data) {
   });
 }
 
+// var getPrivateKey = function(user_id) {
+//   connection.query("select privateKey from users where id = ?", user_id, function(err, output) {
+//     if(!err) {
+//       console.log(output[0].privateKey)
+//       return output[0].privateKey;
+//     }
+//     else {
+//       console.log(err)
+//       throw "undefined"
+//     }
+//   })
+// }
+
 module.exports = doquery;
