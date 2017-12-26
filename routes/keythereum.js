@@ -40,8 +40,11 @@ var rawTx = {
 
 //using ethereumjs-tx function
 var tx = new Tx(rawTx);
+
+//sign your transaction
 tx.sign(privateKey);
 
+//unknown function need to check
 var serializedTx = tx.serialize();
 
 //console.log(serializedTx.toString('hex'));

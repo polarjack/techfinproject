@@ -24,7 +24,8 @@ router.get('/contractDeploy', function (req, res) {
   let contractData = Agreement.new.getData("0xf47dbfc389a7ce03bd0946629735764659a97023", 1514213248, 1514313248, 600, {
     data: contract_bytecode
   })
-
+  
+  res.send("done")
   // web3.eth.sign("0x52da64497cc678d5fe56379e93fbc3a25293b0cc", contractData, function(err, result) {
   //   if(!err) {
   //     console.log(result)

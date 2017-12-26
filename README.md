@@ -6,6 +6,19 @@
 4. smart lock => next stage
 ```
 
+# Steps Of Sending rawtx
+```
+1.  initalize contract code 
+    sol => abi, bytecode
+    combine with constructor (or not), generate contractData (not signed yet)
+2.  Target your user, Prepare user_address & privateKey
+    Both, you can get it from keystore file
+3.  sign your transaction
+4.  serialize
+5.  sendRawTransaction => return txhash
+6.  txhash => getTransactionReceipt => contract_address, gasUsed...
+```
+
 # User 欄位
 ```
 Name, email, Phone Number
