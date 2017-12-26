@@ -33,16 +33,21 @@ Name, email, Phone Number
 一個物件：
 2017/12/20
 
-
+current:
 location: req.body.location,
 item_name: req.body.itemName,
-people_available: req.body.peopleAvailable,
 start_date: start_date,
 end_date: end_date,
 price_perday: req.body.pricePerDay
+valid_start_date
+valid_end_date
+
+
+maybe:
+people_available: req.body.peopleAvailable,
 ```
 
 # Rent fill in info
 ```
-start date, end date
+start date, end date, whoami (session data)
 ```
