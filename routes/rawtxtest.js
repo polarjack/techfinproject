@@ -16,8 +16,6 @@ let contractData = Agreement.new.getData("0xf47dbfc389a7ce03bd0946629735764659a9
 })
 
 
-
-
 // Specify a data directory (optional; defaults to ~/.ethereum)
 var datadir = "./../store";
 
