@@ -4,7 +4,7 @@ var params = { keyBytes: 32, ivBytes: 16 };
 
 var dk = keythereum.create(params);
 
-console.log(dk)
+// console.log(dk)
 
 // var testing = keythereum.dump("testing", dk.privateKey)
 // console.log(testing)
@@ -25,4 +25,11 @@ var options = {
 // synchronous
 var keyObject = keythereum.dump(password, dk.privateKey, dk.salt, dk.iv, options);
 
-keythereum.exportToFile(keyObject)
+var getPrivateKey = keythereum.recover("testing", keyObject);
+
+console.log(keyObject.address)
+
+console.log(getPrivateKey)
+// console.log(keyObject)
+// keythereum.exportToFile(keyObject)
+
