@@ -5,18 +5,26 @@ var doquery = require('../config/dbconfig');
 var newAccount = require('../contract/newAccount');
 
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+router.use("/", function(req, res, next) {
+  if (req.session.login != "hidden") {
+    res.redirect("/login");
+  } else {
+    next();
+  }
 });
 
-router.get('/userList', (req, res) => {
+/* GET users listing. */
+router.get('/', function (req, res, next) {
+  res.redirect('list');
+});
+
+router.get('/list', (req, res) => {
   let query = "select * from users where status = 1";
   const todo = doquery(query, "");
 
   todo.then(input => {
     console.log(input)
-    res.render('userlist', {
+    res.render('users/list', {
       title: "user list",
       data: input
     })
@@ -26,101 +34,50 @@ router.get('/userList', (req, res) => {
   })
 })
 
-// router.get('/login', (req, res) => {
-//   res.render("userlogin", {
-//     title: "userlogin"
-//   })
-// })
-
-// router.post('/verify', (req, res) => {
-//   console.log(req.body)
-//   const todo = doquery("select * from users where email = ? && password = ?", [req.body.email, req.body.password])
-
-//   todo.then(input => {
-//     console.log(input)
-    
-//     //express-session setting
-//     if(input.length > 0) {
-//       req.session.user_id = input[0].id
-//       req.session.name = input[0].name
-//       req.session.email = input[0].email
-
-//       res.json("success")
-//     }
-//     else {
-//       res.redirect('/users/login')
-//     }
-
-//   }).catch(input => {
-//     console.log(input)
-//     res.redirect('/users/login')
-//     res.json("error")
-//   })
-
-// })
-
 router.get('/showyourself', (req, res) => {
-
   if(req.session.user_id !== undefined) {
     res.send("your name is " + req.session.name + ", your e-mail is " + req.session.email);
   }
   else {
-    res.redirect('/users/login')
+    res.redirect('login')
   }
   res.send("show")
 })
 
-router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if(err) {
-      console.log(err)
-    }
-  })
-  res.json("logout done")
-})
-
-router.get('/insertUser', (req, res) => {
-  res.render('insertUser', {
+router.get('/insert', (req, res) => {
+  res.render('users/insert', {
     title: 'Insert User'
   })
 })
 
-router.post('/insertUserAction', (req, res) => {
-  var ethinfo = newAccount(req.body.password);
+router.post('/insertAction', (req, res) => {
 
-  console.log(ethinfo.address);
-  console.log(ethinfo.privateKey);
+  res.send("done")
+  
+  // var ethinfo = newAccount(req.body.password);
 
-  var dbinput = {
-    name: req.body.name,
-    password: req.body.password,
-    email: req.body.email,
-    address: ethinfo.address,
-    privateKey: ethinfo.privateKey
-  }
+  // console.log(ethinfo.address);
+  // console.log(ethinfo.privateKey);
 
-  const todo = doquery("insert into users set ?", dbinput, function(err) {
-    if(err) throw err;  
-  })
+  // var dbinput = {
+  //   name: req.body.name,
+  //   password: req.body.password,
+  //   email: req.body.email,
+  //   address: ethinfo.address,
+  //   privateKey: ethinfo.privateKey
+  // }
 
-  todo.then(input => {
-    console.log(input);
-    res.redirect('/users/userlist');
-  }).catch(input => {
-    console.log(input);
-    res.redirect('/users/insertuser');
-  })
+  // const todo = doquery("insert into users set ?", dbinput, function(err) {
+  //   if(err) throw err;  
+  // })
+
+  // todo.then(input => {
+  //   console.log(input);
+  //   res.redirect('/users/userlist');
+  // }).catch(input => {
+  //   console.log(input);
+  //   res.redirect('/users/insertuser');
+  // })
 })
-
-router.get('/generateaccount', (req, res) => {
-
-})
-
-
-
-
-
-
-
 
 module.exports = router;

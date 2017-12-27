@@ -47,6 +47,15 @@ router.post('/verify', (req, res) => {
   })
 })
 
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if(err) {
+      console.log(err)
+    }
+  })
+  res.redirect('intro');
+})
+
 router.get('/intro', function(req, res) {
   res.render('intro', { 
     title: 'Intro',

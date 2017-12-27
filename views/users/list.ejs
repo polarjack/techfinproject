@@ -1,0 +1,61 @@
+<html>
+
+<head>
+  <% include ./../header %>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h1>User List<a class="btn waves-effect right" href="/users/insert">Insert</a></h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <table class="responsive-table highlight striped" style="max-width: 100%;">
+          <thead>
+            <tr class="row">
+              <th>id</th>
+              <th>name</th>
+              <th>password</th>
+              <th>email</th>
+              <th>address</th>
+              <th>status</th>
+              <th>creation_time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% data.map((i) => { %>
+              <tr>
+                <td>
+                  <%= i.id%>
+                </td>
+                <td>
+                  <%= i.name%>
+                </td>
+                <td>
+                  <%= i.password%>
+                </td>
+                <td>
+                  <%= i.email%>
+                </td>
+                <td>
+                  <%= i.address%>
+                </td>
+                <td>
+                  <%= i.status%>
+                </td>
+                <td>
+                  <%= i.creation_time%>
+                </td>
+              </tr>
+              <% })%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -19,16 +19,25 @@
 6.  txhash => getTransactionReceipt => contract_address, gasUsed...
 ```
 
-# User 欄位
+# Index
 ```
-Name, email, Phone Number
-```
-# Host 欄位
-```
-Name, email, Phone Number
+login
+logout
+
+intro
+travel => browse all main page
+host => redirect to hostmanage
 ```
 
-# Item 欄位
+# User & Host 欄位 (共用Table)
+```
+Name, email, password
+
+users/list
+users/insert
+```
+
+# Items 欄位
 ```
 一個物件：
 2017/12/20
@@ -41,7 +50,6 @@ end_date: end_date,
 price_perday: req.body.pricePerDay
 valid_start_date
 valid_end_date
-
 
 maybe:
 people_available: req.body.peopleAvailable,

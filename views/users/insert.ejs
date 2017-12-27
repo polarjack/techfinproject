@@ -1,0 +1,50 @@
+<html>
+
+<head>
+  <% include ./../header %>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h1>Insert User
+          <a class="btn waves-effect right" href="/users/list">List</a>
+        </h1>
+      </div>
+    </div>
+
+    <div class="card-panel">
+      <form action="/users/insertAction" method="post">
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" id="name" name="name">
+            <label for="name">Account</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" id="email" name="email">
+            <label for="email">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" id="password" name="password">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <button class="btn waves-effect right" type="submit">submit</button>
+          </div>
+        </div>
+      </form>
+      <!-- end of form -->
+    </div>
+    <!-- end of card-panel -->
+  </div>
+  <!-- end of container -->
+</body>
+
+</html>
