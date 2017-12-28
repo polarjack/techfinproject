@@ -23,7 +23,7 @@ router.get('/login', function(req, res) {
 
 router.post('/verify', (req, res) => {
   console.log(req.body)
-  const todo = doquery("select * from users where email = ? && password = ?", [req.body.email, req.body.password])
+  const todo = doquery("select * from users where account = ? && password = ?", [req.body.account, req.body.password])
 
   todo.then(input => {
     console.log(input)
