@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var doquery = require('../config/dbconfig');
 // var Promise = require('promise');
-// var newAccount = require('../contract/newAccount');
 var getNewAddress = require('../store/generateKeyFile');
 
 // router.use("/", function(req, res, next) {
@@ -51,18 +50,7 @@ router.get('/insert', (req, res) => {
 })
 
 router.post('/insertAction', (req, res) => {
-
-  // res.send("done")
-  
-  // var ethinfo = newAccount(req.body.password);
-
-  // console.log(ethinfo.address);
-  // console.log(ethinfo.privateKey);
-  
-  
-
   var ethinfo = getNewAddress(req.body.password)
-  res.send("done")
 
   var dbinput = {
     account: req.body.account,
@@ -71,20 +59,20 @@ router.post('/insertAction', (req, res) => {
   }
 
   dbinput.address = ethinfo.address;
-  dbinput.privateKey = ethinfo.privateKey;
+  dbinput.privateKey = '0x' + ethinfo.privateKey.toString('hex');
 
   // res.json(dbinput)
-  // const todo = doquery("insert into users set ?", dbinput, function(err) {
-  //   if(err) throw err;  
-  // })
+  const todo = doquery("insert into users set ?", dbinput, function(err) {
+    if(err) throw err;  
+  })
 
-  // todo.then(input => {
-  //   console.log(input);
-  //   res.redirect('/users/userlist');
-  // }).catch(input => {
-  //   console.log(input);
-  //   res.redirect('/users/insertuser');
-  // })
+  todo.then(input => {
+    console.log(input);
+    res.redirect('/users/list');
+  }).catch(input => {
+    console.log(input);
+    res.redirect('/users/insert');
+  })
 })
 
 module.exports = router;
