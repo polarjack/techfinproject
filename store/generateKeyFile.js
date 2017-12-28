@@ -1,4 +1,7 @@
 var keythereum = require("keythereum");
+var path = require('path');
+
+var appDir = path.dirname(require.main.filename);
 
 function getNewAccount(_password) {
   var params = { keyBytes: 32, ivBytes: 16 };
@@ -31,9 +34,17 @@ function getNewAccount(_password) {
     privateKey: filePrivateKey
   }
 
-  keythereum.exportToFile(keyObject)
+  const outputFilePath = appDir + '/store/keystore'; //fix the path so keythereum don't panic
+
+  keythereum.exportToFile(keyObject, outputFilePath)
   
-  return output;
+  console.log("after")
+  if(typeof output.address == undefined || output.address == '0x' || output.address == '') {
+    throw "Generate Failed"
+  }
+  else {
+    return output;
+  }
 }
 
 module.exports = getNewAccount;
