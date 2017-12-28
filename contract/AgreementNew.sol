@@ -5,14 +5,14 @@ contract Agreement {
   bool life;
 
   address public host;
-  uint public availableStartTime;
-  uint public availableEndTime;
+  string public availableStartTime;
+  string public availableEndTime;
   uint public pricePerDay;
   bool public ifbook;
 
   address public user;
-  uint public validStartTime;
-  uint public validEndTime;
+  string public validStartTime;
+  string public validEndTime;
 
   modifier onlyadmin() {
     require(admin == msg.sender);
@@ -34,7 +34,7 @@ contract Agreement {
     _;
   }
 
-  function Agreement(address _host, uint _startTime, uint _endTime, uint _price) public {
+  function Agreement(address _host, string _startTime, string  _endTime, uint _price) public {
     admin = msg.sender;
 
     host = _host;
@@ -46,7 +46,7 @@ contract Agreement {
     ifbook = false;
   }
 
-  function book(address _user, uint _startTime, uint _endTime) public {
+  function book(address _user, string _startTime, string _endTime) public {
     require(ifbook == false);
     user = _user;
     validStartTime = _startTime;
@@ -57,8 +57,8 @@ contract Agreement {
   function cancel(address _user) public {
     require(user == _user);
     user = 0x0;
-    validStartTime = 0;
-    validEndTime = 0;
+    validStartTime = "";
+    validEndTime = "";
     ifbook = false;
   }
 

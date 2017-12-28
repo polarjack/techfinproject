@@ -48,7 +48,7 @@ function contractDeploy(user_address, user_password, start_date, end_date, price
 
   var rawTx = {
     //nonce => maintain by ourself
-    nonce: web3.eth.getTransactionCount(user_address) + 1,
+    nonce: web3.eth.getTransactionCount(user_address),
     gasLimit: 1000000,
     data: contractData
   }
@@ -62,11 +62,44 @@ function contractDeploy(user_address, user_password, start_date, end_date, price
 
   //unknown function need to check
   var serializedTx = tx.serialize();
-
+  console.log(user_address)
+  console.log(user_password)
   var txhash = web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'));
-  var receipt = web3.eth.getTransactionReceipt(txhash)
+  // var receipt = web3.eth.getTransactionReceipt(txhash)
 
-  return receipt;
+  // return receipt;
 }
 
-module.exports = getPrivateKey;
+function sendMoney(user_address) {
+  var master_address = eth.coinbase;
+
+  var keyObject = keythereum.importFromFile(master_address, keydatadir);
+  //generate privateKey from file
+  var privateKey = keythereum.recover("techfin", keyObject); //password and keyObject
+  var rawTx = {
+    nonce: eth.getTransactionCount(master_address),
+    gasLimit: 1000000,
+    to: user_address, 
+    value: 0x4240
+  }
+  
+  //using ethereumjs-tx function
+  var tx = new Tx(rawTx);
+
+  //sign your transaction
+  tx.sign(privateKey);
+
+  //unknown function need to check
+  var serializedTx = tx.serialize();
+  var txhash = web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'));
+  console.log(txhash)
+  // var receipt = web3.eth.getTransactionReceipt(txhash)
+  // console.log(receipt);
+
+  return txhash;
+}
+
+module.exports = {
+  contractDeploy: contractDeploy,
+  sendMoney: sendMoney
+};
