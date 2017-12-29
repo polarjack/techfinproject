@@ -94,6 +94,7 @@ function sendMoney(user_address) {
   var serializedTx = tx.serialize();
   var txhash = web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'));
   console.log(txhash)
+  
   // var receipt = web3.eth.getTransactionReceipt(txhash)
   // console.log(receipt);
 

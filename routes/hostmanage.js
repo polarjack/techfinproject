@@ -68,21 +68,33 @@ router.post("/iteminsertdo", function(req, res) {
 
   // var todo = doquery("insert into items into ?", data);
 
-  // var txhash = chain.contractDeploy(
-  //   user_address,
-  //   "123456",
-  //   data.start_date,
-  //   data.end_date,
-  //   data.price_perday
-  // );
+  var txhash = chain.contractDeploy(
+    user_address,
+    "123456",
+    data.start_date,
+    data.end_date,
+    data.price_perday
+  );
   
-  // setTimeout(function() {
-  //   var receipt = Web3.eth.getTransactionReceipt(txhash);
-  //   console.log(receipt);
-    
-  // }, 4000)
+  data.start_date = new Date(data.start_date)
+  data.end_date = new Date(data.end_date)
 
-  res.redirect('/showsession');
+  setTimeout(function() {
+    var receipt = Web3.eth.getTransactionReceipt(txhash);
+    data.contract_address = receipt.contractAddress;
+    data.block_number = receipt.blockNumber;
+    data.gas_used = receipt.gasUsed;
+    console.log(receipt);
+    
+    var todo = doquery("insert into items set ?", data);
+    todo.then(input => {
+      console.log(input)
+    }).catch(input => {
+      console.log(input)
+    })
+  }, 6000)
+
+  res.send("done");
 });
 
 router.get("/showsession", function(req, res) {
