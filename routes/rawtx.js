@@ -62,12 +62,13 @@ function contractDeploy(user_address, user_password, start_date, end_date, price
 
   //unknown function need to check
   var serializedTx = tx.serialize();
-  console.log(user_address)
-  console.log(user_password)
+  // console.log(user_address)
+  // console.log(user_password)
   var txhash = web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'));
   // var receipt = web3.eth.getTransactionReceipt(txhash)
-
-  // return receipt;
+  
+  console.log(txhash);
+  return txhash;
 }
 
 function sendMoney(user_address) {
