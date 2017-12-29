@@ -18,19 +18,38 @@
 
       <ul class="collapsible expandable">
 
-        <% items.map(function(i) { %>
+        <% items.map(function(i) { 
+          i.start_date = new Date(i.start_date);
+          i.start_date = i.start_date.toDateString();
+          i.end_date = new Date(i.end_date);
+          i.end_date = i.end_date.toDateString();
+          
+          %>
           <li>
             <div class="collapsible-header">
-              <i class="material-icons">business</i><%= i.item_name%></div>
+              <i class="material-icons">business</i>
+              <%= i.item_name%>
+            </div>
             <div class="collapsible-body">
-              <div class="row">
-                <div class="col s12">
-                  
-                </div>
-              </div>
+              <ul class="left-align">
+                <li>
+                  <i class="material-icons">room</i>&nbsp;
+                  <%=i.location%>
+                </li>
+                <li>
+                  <i class="material-icons">polymer</i>&nbsp;
+                  <%=i.contract_address%>
+                </li>
+                <li>
+                  <i class="material-icons">check_circle</i>
+                  <%=i.start_date%>
+                    <i class="material-icons">keyboard_arrow_right</i>
+                    <%=i.end_date%>
+                </li>
+              </ul>
             </div>
           </li>
-        <% }) %>
+          <% }) %>
       </ul>
     </div>
 </body>
@@ -39,8 +58,8 @@
   $(document).ready(function () {
     $('.collapsible').collapsible();
     $('.collapsible.expandable').collapsible({
-    accordion: false
-  });
+      accordion: false
+    });
   });
 </script>
 

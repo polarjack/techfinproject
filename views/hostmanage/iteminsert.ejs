@@ -9,10 +9,9 @@
 
     <div class="container">
       <div class="row">
-
-        <h1 class="center">Items Insert</h1>
+        <h1 class="center">Item Insert</h1>
         <div class="row card-panel">
-          <form class="col s12" action="iteminsertdo" method="post">
+          <form class="col s12" action="iteminsertdo" id="item" method="post">
             <div class="row">
               <div class="input-field col s12">
                 <input type="text" id="itemName" name="itemName">
@@ -41,21 +40,44 @@
                 <label for="endDate">結束時間</label>
               </div>
             </div>
+            <input type="text" name="password" id="password" hidden>
 
-            <div class="row">
-              <button class="waves-effect waves-light btn right" type="submit">Submit</button>
-            </div>
           </form>
+          <a class="waves-effect waves-light btn right modal-trigger" href="#passwordcheck">Submit</a>
+
         </div>
       </div>
     </div>
 
+
+    <!-- Modal Structure -->
+    <div id="passwordcheck" class="modal">
+      <div class="modal-content">
+        <div class="container">
+          <h5 class="center-align">Please Enter Your Password To Comfirm Transaction</h5>
+          <div class="input-field">
+            <input type="text" id="passwordtwice" name="passwordtwice">
+            <label for="passwordtwice">Password</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action waves-effect waves-green btn-flat" onclick="agree()">Agree</a>
+      </div>
+    </div>
 </body>
 
 <script type="text/javascript">
   $(document).ready(function () {
     $('.datepicker').datepicker();
+    $('.modal').modal();
   });
+
+  function agree() {
+    var password = $('#passwordtwice').val();
+    $('#password').val(password);
+    $('#item').submit();
+  }
 </script>
 
 </html>

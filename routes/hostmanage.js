@@ -59,8 +59,11 @@ router.get("/insert", function(req, res) {
 });
 
 router.post("/iteminsertdo", function(req, res) {
+
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
+  var user_password = req.body.password;
+  
 
   var data = {
     item_name: req.body.itemName,
@@ -75,7 +78,7 @@ router.post("/iteminsertdo", function(req, res) {
 
   var txhash = chain.contractDeploy(
     user_address,
-    "123456",
+    user_password, // need to fix
     data.start_date,
     data.end_date,
     data.price_perday
@@ -84,20 +87,20 @@ router.post("/iteminsertdo", function(req, res) {
   data.start_date = new Date(data.start_date)
   data.end_date = new Date(data.end_date)
 
-  setTimeout(function() {
-    var receipt = Web3.eth.getTransactionReceipt(txhash);
-    data.contract_address = receipt.contractAddress;
-    data.block_number = receipt.blockNumber;
-    data.gas_used = receipt.gasUsed;
-    console.log(receipt);
+  // setTimeout(function() {
+  //   var receipt = Web3.eth.getTransactionReceipt(txhash);
+  //   data.contract_address = receipt.contractAddress;
+  //   data.block_number = receipt.blockNumber;
+  //   data.gas_used = receipt.gasUsed;
+  //   console.log(receipt);
     
-    var todo = doquery("insert into items set ?", data);
-    todo.then(input => {
-      console.log(input)
-    }).catch(input => {
-      console.log(input)
-    })
-  }, 6000)
+  //   var todo = doquery("insert into items set ?", data);
+  //   todo.then(input => {
+  //     console.log(input)
+  //   }).catch(input => {
+  //     console.log(input)
+  //   })
+  // }, 6000)
 
   res.send("done");
 });
