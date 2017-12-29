@@ -10,29 +10,29 @@ var chain = require("./rawtx");
 
 //middleware
 router.use("/", function(req, res, next) {
-  const todo = doquery(
-    "select * from users where account = ? && password = ?",
-    ["fuckinggod", "123456"]
-  );
+  // const todo = doquery(
+  //   "select * from users where account = ? && password = ?",
+  //   ["fuckinggod", "123456"]
+  // );
 
-  todo.then(input => {
-    // console.log(input);
+  // todo.then(input => {
+  //   // console.log(input);
 
-    //express-session setting
-    if (input.length > 0) {
-      req.session.user_id = input[0].id;
-      req.session.name = input[0].name;
-      req.session.email = input[0].email;
-      req.session.user_address = input[0].address;
-      req.session.login = "hidden";
-    }
-    next();
-  });
-  // if (req.session.login != "hidden") {
-  //   res.redirect("../login");
-  // } else {
+  //   //express-session setting
+  //   if (input.length > 0) {
+  //     req.session.user_id = input[0].id;
+  //     req.session.name = input[0].name;
+  //     req.session.email = input[0].email;
+  //     req.session.user_address = input[0].address;
+  //     req.session.login = "hidden";
+  //   }
   //   next();
-  // }
+  // });
+  if (req.session.login != "hidden") {
+    res.redirect("../login");
+  } else {
+    next();
+  }
 });
 
 router.get("/", function(req, res) {
@@ -40,10 +40,15 @@ router.get("/", function(req, res) {
 });
 
 router.get("/mylist", function(req, res) {
-  res.render("hostmanage/mylist", {
-    title: "hostmanage mylist",
-    login: req.session.login
-  });
+  var todo = doquery("select * from items where owner = " + req.session.user_id, "");
+  
+  todo.then(input => {
+    res.render("hostmanage/mylist", {
+      title: "hostmanage mylist",
+      login: req.session.login,
+      items: input
+    });
+  })
 });
 
 router.get("/insert", function(req, res) {
