@@ -176,7 +176,6 @@ router.get("/sendmoney", function(req, res) {
   }, 4000);
 });
 
-
 router.get('/sessionshow', function(req, res) {
   res.json(req.session);
 })

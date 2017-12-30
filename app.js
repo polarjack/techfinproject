@@ -14,6 +14,7 @@ var agreement = require('./routes/agreement');
 var contractapi = require('./routes/contractapi');
 var hostmanage = require('./routes/hostmanage');
 var contracttest = require('./routes/contracttest');
+var book = require('./routes/book');
 
 var app = express();
 var port = 3000
@@ -45,9 +46,12 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/main', main);
 app.use('/items', items);
+app.use('/hostmanage', hostmanage);
+app.use('/book', book);
+
+// for testing
 app.use('/agreement', agreement);
 app.use('/contractapi', contractapi);
-app.use('/hostmanage', hostmanage);
 app.use('/contracttest', contracttest);
 
 // catch 404 and forward to error handler
