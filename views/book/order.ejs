@@ -8,22 +8,121 @@
 
 <body>
   <% include ./../navbar %>
-    <div class="container">
-      <h1>Item Info</h1>
-      
+    <div class="container" id="app">
+      <h4>
+        <%=data.item_name%>
+      </h4>
       <div class="row">
         <div class="col s12">
           <div class="card-panel">
             <div class="row">
-              <div class="col s12">
-                <ul></ul>
+              <div class="col s3">
+                <img class="materialboxed" src="/images/<%=data.image%>" width="100%" height="">
+              </div>
+              <div class="col s8 offset-s1">
+                <div class="row">
+                  <blockquote>
+                    <ul>
+                      <li class="valign-wrapper">
+                        <i class="material-icons red-text">room</i>
+                        <b>Location:</b> &nbsp;
+                        <%=data.location%>
+                      </li>
+                      <li class="valign-wrapper">
+                        <i class="material-icons blue-text">watch_later</i>
+                        <b>Available Date:</b> &nbsp;
+                        <%=data.start_date%>
+                          <i class="material-icons">keyboard_arrow_right</i>
+                          <%=data.end_date%>
+                      </li>
+                      <br>
+                      <li class="valign-wrapper">
+                        <i class="material-icons yellow-text">attach_money</i>
+                        <b>Price Per Day: </b> &nbsp;
+                        <%=data.price_perday%>
+                      </li>
+                    </ul>
+                  </blockquote>
+                </div>
+                <div class="row">
+                  <blockquote>
+                    <ul>
+                      <li class="valign-wrapper">
+                        <i class="material-icons green-text">check_circle</i>&nbsp;
+                        <b>Still Available</b>
+                      </li>
+                    </ul>
+                  </blockquote>
+                </div>
+                <div class="row">
+                  <blockquote>
+                    <form action="/orderaction" method="post">
+                      <div class="row">
+                        <div class="input-field col s3">
+                          <input type="text" id="startDate" name="startDate" v-on:change="updateStart" class="datepicker">
+                          <label for="startDate">Start</label>
+                        </div>
+                        <div class="col s1" style="margin-top: 30px;">
+                          <i class="material-icons md-48 blue-text">trending_flat</i>
+                        </div>
+                        <div class="input-field col s3">
+                          <input type="text" id="endDate" name="endDate" v-on:change="updateEnd" class="datepicker">
+                          <label for="endDate">End</label>
+                        </div>
+                        <input type="number" id="pricePerDay" name="pricePerDay" hidden value="<%=data.prcie_perday%>">
+                      </div>
+                    </form>
+                    <div class="valign-wrapper">
+                      <i class="material-icons amber-text">attach_money</i>&nbsp; {{ toshow }}
+                    </div>
+                  </blockquote>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
+      <button class="btn waves-effect right">Ordered</button>
     </div>
+
 </body>
+<script>
+  $(document).ready(function () {
+    $('.datepicker').datepicker();
+  });
+
+  new Vue({
+    el: '#app',
+    data: {
+      startDate: "",
+      endDate: "",
+      toshow: "Please Input Start and End",
+      oneDay: 24 * 60 * 60 * 1000,
+      pricePerDay: <%=data.price_perday%>
+    },
+    watch: {
+      startDate: function () {
+        if (this.startDate != "" && this.endDate != "") {
+          var half = new Date(this.endDate).getTime() - new Date(this.startDate).getTime()
+          this.toshow = Math.round(Math.abs(half / this.oneDay))
+        }
+      },
+      endDate: function () {
+        if (this.startDate != "" && this.endDate != "") {
+          var half = new Date(this.endDate).getTime() - new Date(this.startDate).getTime()
+          this.toshow = Math.round(Math.abs(half / this.oneDay)) * this.pricePerDay
+        }
+      }
+    },
+    methods: {
+      updateStart: function (event) {
+        this.startDate = event.target.value;
+      },
+      updateEnd: function (event) {
+        this.endDate = event.target.value;
+      }
+    }
+  })
+</script>
 
 </html>

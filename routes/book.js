@@ -22,7 +22,7 @@ router.get('/ordered/:id', function(req, res) {
     res.render("book/order", {
       title: "order",
       login: req.session.login,
-      data: input
+      data: input[0]
     })
   }).catch(input => {
     console.log(input)
