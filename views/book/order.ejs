@@ -9,12 +9,15 @@
 <body>
   <% include ./../navbar %>
     <div class="container" id="app">
-      <h4>
-        <%=data.item_name%>
-      </h4>
+      <div class="row">
+        <h4 class="col s12 center">
+          <%=data.item_name%>
+        </h4>
+      </div>
       <div class="row">
         <div class="col s12">
           <div class="card-panel">
+
             <div class="row">
               <div class="col s3">
                 <img class="materialboxed" src="/images/<%=data.image%>" width="100%" height="">
@@ -38,7 +41,7 @@
                       <br>
                       <li class="valign-wrapper">
                         <i class="material-icons yellow-text">attach_money</i>
-                        <b>Price Per Day: </b> &nbsp;
+                        <b>Price Per Day: </b> &nbsp; NTD $
                         <%=data.price_perday%>
                       </li>
                     </ul>
@@ -56,7 +59,7 @@
                 </div>
                 <div class="row">
                   <blockquote>
-                    <form action="/orderaction" method="post">
+                    <form action="/book/orderaction" id="orderedform" method="post">
                       <div class="row">
                         <div class="input-field col s3">
                           <input type="text" id="startDate" name="startDate" v-on:change="updateStart" class="datepicker">
@@ -69,8 +72,13 @@
                           <input type="text" id="endDate" name="endDate" v-on:change="updateEnd" class="datepicker">
                           <label for="endDate">End</label>
                         </div>
-                        <input type="number" id="pricePerDay" name="pricePerDay" hidden value="<%=data.prcie_perday%>">
+                        <input type="number" id="pricePerDay" name="pricePerDay" hidden value=<%=data.price_perday%>>
                       </div>
+
+                      <input hidden type="text" id="passwordConfirm" name="passwordComfirm">
+                      <input hidden type="text" id="orderId" name="orderId"  value=<%=data.id%> >
+                      <input hidden type="text" id="contractAddress" name="contractAddress" value=<%=data.contract_address%>>
+                      
                     </form>
                     <div class="valign-wrapper">
                       <i class="material-icons amber-text">attach_money</i>&nbsp; {{ toshow }}
@@ -82,14 +90,49 @@
           </div>
         </div>
       </div>
-      <button class="btn waves-effect right">Ordered</button>
+      <button class="btn waves-effect right" onclick="openModal()">Ordered</button>
     </div>
 
+
+    <!-- Modal Structure -->
+    <div id="passwordcheck" class="modal">
+      <div class="modal-content">
+        <div class="container">
+          <h5 class="center-align">Please Enter Your Password To Comfirm Transaction</h5>
+          <div class="input-field">
+            <input type="password" id="passwordtwice" name="passwordtwice">
+            <label for="passwordtwice">Password</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action waves-effect waves-green btn-flat" onclick="agree()">Agree</a>
+      </div>
+    </div>
 </body>
 <script>
   $(document).ready(function () {
     $('.datepicker').datepicker();
+    $('.modal').modal();
   });
+
+  function openModal() {
+
+    if ($('#startDate').val() == "" || $('#endDate').val() == "") {
+      alert('Please choose date')
+    } else {
+      $('#passwordcheck').modal('open');
+    }
+  }
+
+  function agree() {
+
+    $('#passwordcheck').modal('close');
+    var password = $('#passwordtwice').val();
+    $('#passwordConfirm').val(password);
+    console.log(password)
+    $('#orderedform').submit();
+  }
 
   new Vue({
     el: '#app',

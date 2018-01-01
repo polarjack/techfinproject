@@ -17,16 +17,16 @@ var contract_bytecode = '0x' + fs.readFileSync('contract/AgreementNew.bin', 'utf
 
 
 
-function getPrivateKey(user_address, user_password) {
+// function getPrivateKey(user_address, user_password) {
 
-  // Synchronous
-  // find file form datadir + '/keystore' => assign file address to import file
-  var keyObject = keythereum.importFromFile(user_address, keydatadir);
-  //generate privateKey from file
-  var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
+//   // Synchronous
+//   // find file form datadir + '/keystore' => assign file address to import file
+//   var keyObject = keythereum.importFromFile(user_address, keydatadir);
+//   //generate privateKey from file
+//   var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
 
-  return privateKey;
-}
+//   return privateKey;
+// }
 
 function contractDeploy(user_address, user_password, start_date, end_date, price_perday) {
   // Synchronous
@@ -34,7 +34,6 @@ function contractDeploy(user_address, user_password, start_date, end_date, price
   var keyObject = keythereum.importFromFile(user_address, keydatadir);
   //generate privateKey from file
   var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
-
 
   //Prepare
   const Agreement = eth.contract(contract_abi);
@@ -53,12 +52,11 @@ function contractDeploy(user_address, user_password, start_date, end_date, price
     data: contractData
   }
 
-  //using ethereumjs-tx function
+  // using ethereumjs-tx function
   var tx = new Tx(rawTx);
 
   //sign your transaction
   tx.sign(privateKey);
-
 
   //unknown function need to check
   var serializedTx = tx.serialize();
@@ -71,6 +69,57 @@ function contractDeploy(user_address, user_password, start_date, end_date, price
   return txhash;
 }
 
+function book(contract_address, user_address, user_password, order_start_time, order_end_time) {
+  var keyObject = keythereum.importFromFile(user_address, keydatadir);
+  // generate privateKey from file
+  var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
+
+  const Agreement = eth.contract(contract_abi).at(contract_address);
+
+  Agreement.book.getData(user_address, order_start_time, order_end_time, {
+    data: contract_bytecode
+  })
+
+
+  // must info
+  var gasEstimate = 100000 //must for transaction info
+
+  var rawTx = {
+    // nonce => maintain by ourself
+    nonce: web3.eth.getTransactionCount(user_address),
+    gasLimit: gasEstimate,
+    data: contractData
+  }
+
+  // using ethereumjs-tx function
+  var tx = new Tx(rawTx);
+
+  // sign your transaction
+  tx.sign(privateKey);
+
+  // unknown function need to check
+  var serializedTx = tx.serialize();
+  // console.log(user_address)
+  // console.log(user_password)
+  var txhash = web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'));
+  // var receipt = web3.eth.getTransactionReceipt(txhash)
+  
+  console.log(txhash);
+  return txhash;
+}
+
+// function testing(user_address, user_password, contract_address) {
+//   var keyObject = keythereum.importFromFile(user_address, keydatadir);
+//   // generate privateKey from file
+//   var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
+
+//   const Agreement = eth.contract(contract_abi);
+  
+//   Agreement.at(contract_address)
+
+
+// }
+
 function sendMoney(user_address) {
   var master_address = eth.coinbase;
 
@@ -81,7 +130,7 @@ function sendMoney(user_address) {
     nonce: eth.getTransactionCount(master_address),
     gasLimit: 1000000,
     to: user_address, 
-    value: 0x4240
+    value: 1000
   }
   
   //using ethereumjs-tx function
@@ -103,5 +152,6 @@ function sendMoney(user_address) {
 
 module.exports = {
   contractDeploy: contractDeploy,
-  sendMoney: sendMoney
+  sendMoney: sendMoney,
+  book: book
 };
