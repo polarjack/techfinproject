@@ -48,7 +48,7 @@
                   </blockquote>
                 </div>
                 <div class="row">
-                  <blockquote>
+                  <blockquote v-if="<%=ifbook%> == false">
                     <ul>
                       <li class="valign-wrapper">
                         <i class="material-icons green-text">check_circle</i>&nbsp;
@@ -56,8 +56,17 @@
                       </li>
                     </ul>
                   </blockquote>
+
+                  <blockquote v-else>
+                    <ul>
+                      <li class="valign-wrapper">
+                        <i class="material-icons red-text">check_circle</i>&nbsp;
+                        <b>Booked</b>
+                      </li>
+                    </ul>
+                  </blockquote>
                 </div>
-                <div class="row">
+                <div class="row" v-show="<%=ifbook%> == false">
                   <blockquote>
                     <form action="/book/orderaction" id="orderedform" method="post">
                       <div class="row">
@@ -76,9 +85,9 @@
                       </div>
 
                       <input hidden type="text" id="passwordConfirm" name="passwordComfirm">
-                      <input hidden type="text" id="orderId" name="orderId"  value=<%=data.id%> >
+                      <input hidden type="text" id="orderId" name="orderId" value=<%=data.id%> >
                       <input hidden type="text" id="contractAddress" name="contractAddress" value=<%=data.contract_address%>>
-                      
+
                     </form>
                     <div class="valign-wrapper">
                       <i class="material-icons amber-text">attach_money</i>&nbsp; {{ toshow }}
@@ -90,7 +99,7 @@
           </div>
         </div>
       </div>
-      <button class="btn waves-effect right" onclick="openModal()">Ordered</button>
+      <button v-show="<%=ifbook%> == false" class="btn waves-effect right" onclick="openModal()">Ordered</button>
     </div>
 
 

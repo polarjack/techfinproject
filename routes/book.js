@@ -7,6 +7,14 @@ var eth = Web3.eth;
 
 var chain = require("./rawtx");
 
+router.use("/", function(req, res, next) {
+  if (req.session.login != "hidden") {
+    res.redirect("/login");
+  } else {
+    next();
+  }
+});
+
 router.get('/', function(req ,res) {
   res.send("done");
 })
@@ -14,16 +22,22 @@ router.get('/', function(req ,res) {
 router.get('/ordered/:id', function(req, res) {
   console.log(req.params.id);
 
+  var user_id = req.session.user_id;
+  var user_address = req.session.user_address;
+
   var todo = doquery("select * from items where id = " + req.params.id, "");
   todo.then(input => {
     input[0].start_date = new Date(input[0].start_date).toDateString()
     input[0].end_date = new Date(input[0].end_date).toDateString()
     
+    var ifbook = chain.getIfBook(input[0].contract_address)
+
     console.log(input[0])
     res.render("book/order", {
       title: "order",
       login: req.session.login,
-      data: input[0]
+      data: input[0],
+      ifbook: ifbook
     })
   }).catch(input => {
     console.log(input)
@@ -32,9 +46,9 @@ router.get('/ordered/:id', function(req, res) {
 })
 
 router.post('/orderaction', function(req, res) {
-  console.log(req.body)
   var require_id = req.body.orderId;
   var user_address = req.session.user_address;
+  var user_id = req.session.user_id;
   var user_password = req.body.passwordComfirm;
   var order_startDate = req.body.startDate;
   var order_endDate = req.body.endDate;
@@ -43,10 +57,11 @@ router.post('/orderaction', function(req, res) {
   var data = {
     item_id: require_id,
     user_address: user_address,
-    user_password: user_password,
     start_date: order_startDate,
     end_date: order_endDate,
-    contract_address: contract_address 
+    contract_address: contract_address,
+    item_id: require_id,
+    user_id: user_id
   }
 
   // res.json(data)
@@ -57,19 +72,46 @@ router.post('/orderaction', function(req, res) {
     order_startDate,
     order_endDate
   );
-  
-  setTimeout(function() {
-    var receipt = Web3.eth.getTransactionReceipt(txhash);
-    console.log(receipt);
+  data.transaction = txhash
+
+  // var previous = doquery("update book set status = 0 where contract_address = " + contract_address, "");
+
+  var todo = doquery("INSERT INTO book SET ?", data);
+
+  todo.then(input => {
+    console.log(input)
     res.send("done")
-  }, 6000)
+  }).catch(input => {
+    console.log(input)
+    res.send("failed")
+  })
+
+  // setTimeout(function() {
+  //   var receipt = Web3.eth.getTransactionReceipt(txhash);
+  //   console.log(receipt);
+  //   res.send("done")
+  // }, 6000)
+})
+
+router.get('/list', (req, res) => {
+  var user_id = req.session.user_id;
+  var user_address = req.session.user_address;
+
+  var todo = doquery("select * from users inner join book on users.address = book.user_address where book.status = 1 and users.id = " + user_id, "")
+
+  todo.then(input => {
+    console.log(input);
+    res.send("done")
+  }).catch(input => {
+    console.log(input);
+    res.send("failed")
+  })
 })
 
 router.get("/testing", (req, res) => {
   var contract_address = "0xaec506f54bdb63299a56f54955f16a05a944136a"
-  var user_address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0"
-
-  var result = chain.getUser(contract_address, user_address, user_password)
+  
+  var result = chain.getIfBook(contract_address)
   
   res.send(result)
 })

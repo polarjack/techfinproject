@@ -47,7 +47,6 @@ contract Agreement {
   }
 
   function book(address _user, string _startTime, string _endTime) public {
-    require(ifbook == false);
     user = _user;
     validStartTime = _startTime;
     validEndTime = _endTime;

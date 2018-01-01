@@ -130,30 +130,30 @@ function book(
   return txhash;
 }
 
-function getIfBook(contract_address, user_address) {  
+function getIfBook(contract_address) {
   const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.ifbook()
+  const result = Agreement.ifbook();
 
   return result;
 }
 
-function getUser(contract_address, user_address) {
+function getUser(contract_address) {
   const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.user()
+  const result = Agreement.user();
 
   return result;
 }
 
-function getUserStartTime(contract_address, user_address) {
+function getUserStartTime(contract_address) {
   const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.validStartTime()
+  const result = Agreement.validStartTime();
 
   return result;
 }
 
-function getUserEndTime(contract_address, user_address) {
+function getUserEndTime(contract_address) {
   const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.validEndTime()
+  const result = Agreement.validEndTime();
 
   return result;
 }
@@ -164,6 +164,7 @@ function sendMoney(user_address) {
   var keyObject = keythereum.importFromFile(master_address, keydatadir);
   //generate privateKey from file
   var privateKey = keythereum.recover("techfin", keyObject); //password and keyObject
+
   var rawTx = {
     nonce: eth.getTransactionCount(master_address),
     gasLimit: 1000000,
@@ -184,7 +185,7 @@ function sendMoney(user_address) {
 
   // var receipt = web3.eth.getTransactionReceipt(txhash)
   // console.log(receipt);
-  
+
   return txhash;
 }
 
@@ -192,5 +193,8 @@ module.exports = {
   contractDeploy: contractDeploy,
   sendMoney: sendMoney,
   book: book,
-  getUser: getUser
+  getUser: getUser,
+  getIfBook: getIfBook,
+  getUserStartTime: getUserStartTime,
+  getUserEndTime: getUserEndTime
 };
