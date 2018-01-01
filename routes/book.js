@@ -40,6 +40,16 @@ router.post('/orderaction', function(req, res) {
   var order_endDate = req.body.endDate;
   var contract_address = req.body.contractAddress;
 
+  var data = {
+    item_id: require_id,
+    user_address: user_address,
+    user_password: user_password,
+    start_date: order_startDate,
+    end_date: order_endDate,
+    contract_address: contract_address 
+  }
+
+  // res.json(data)
   var txhash = chain.book(
     contract_address,
     user_address, 
@@ -53,6 +63,15 @@ router.post('/orderaction', function(req, res) {
     console.log(receipt);
     res.send("done")
   }, 6000)
+})
+
+router.get("/testing", (req, res) => {
+  var contract_address = "0xaec506f54bdb63299a56f54955f16a05a944136a"
+  var user_address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0"
+
+  var result = chain.getUser(contract_address, user_address, user_password)
+  
+  res.send(result)
 })
 
 // router.get('/testcontract', function(req, res) {
