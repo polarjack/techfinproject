@@ -68,10 +68,15 @@ router.get('/host', function(req, res) {
 })
 
 router.get('/travel', function(req, res) {
-  res.render('travel', {
-    title: "travel",
-    login: req.session.login
+  var todo = doquery("select * from items where status = 1")
+  todo.then(input => {
+    res.render('travel', {
+      title: "travel",
+      login: req.session.login,
+      data: input
+    })
   })
+  
 })
 
 router.get('/showsession', function(req, res) {

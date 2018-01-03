@@ -83,24 +83,23 @@
         <h4>Rooms</h4>
         <div class="row">
 
-            <% for(var i = 0; i < 20; i++) { %>
-                <div class="col s6 m3">
-                    <a href="#">
+            <% data.map((i) => { %>
+                <div class="col s6 m4">
+                    <a href="book/ordered/<%=i.id%>">
                         <div class="card hoverable">
                             <div class="card-image">
-                                <img src="/images/travel.jpeg">
+                                <img src="images/<%=i.image%>">
                             </div>
                             <div class="card-content">
-                                <span>type</span>
-                                <br>
-                                <span class="activator grey-text text-darken-4">sweet home</span>
-                                <br>
-                                <span>Price</span>
+                                <span><%=i.item_name%></span>&nbsp; <br>
+                                 Price: <span><%=i.price_perday%></span>
+                                 <br>
+                                <span class="activator grey-text text-darken-4"><%=i.location%></span>
                             </div>
                         </div>
                     </a>
                 </div>
-                <% } %>
+                <% }) %>
         </div>
 </body>
 
