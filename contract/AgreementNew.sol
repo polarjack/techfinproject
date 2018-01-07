@@ -61,7 +61,7 @@ contract Agreement {
     ifbook = false;
   }
 
-  function disableContract() public onlyadmin{
+  function disableContract() public onlyadmin {
     life = false;
   }
 
