@@ -12,10 +12,10 @@ const keydatadir = appDir + "/store";
 
 //generate contractData from contract_abi & contract_bytecode
 var contract_abi = JSON.parse(
-  fs.readFileSync("contract/AgreementNew.json", "utf8")
+  fs.readFileSync("contract/Lock.json", "utf8")
 );
 var contract_bytecode =
-  "0x" + fs.readFileSync("contract/AgreementNew.bin", "utf8");
+  "0x" + fs.readFileSync("contract/Lock.bin", "utf8");
 
 // function getPrivateKey(user_address, user_password) {
 
@@ -46,8 +46,6 @@ function contractDeploy(
 
   const contractData = Agreement.new.getData(
     user_address,
-    start_date,
-    end_date,
     price_perday,
     {
       data: contract_bytecode
@@ -83,21 +81,16 @@ function contractDeploy(
 
 function book(
   contract_address,
-  user_address,
-  user_password,
-  order_start_time,
-  order_end_time
+  user_address
 ) {
-  var keyObject = keythereum.importFromFile(user_address, keydatadir);
+  var keyObject = keythereum.importFromFile(eth.coinbase, keydatadir);
   // generate privateKey from file
-  var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
+  var privateKey = keythereum.recover("techfin", keyObject); //password and keyObject
 
   const Agreement = eth.contract(contract_abi).at(contract_address);
 
   const contractData = Agreement.book.getData(
     user_address,
-    order_start_time,
-    order_end_time,
     {
       data: contract_bytecode
     }
@@ -108,7 +101,7 @@ function book(
 
   var rawTx = {
     // nonce => maintain by ourself
-    nonce: web3.eth.getTransactionCount(user_address),
+    nonce: web3.eth.getTransactionCount(eth.coinbase),
     gasLimit: gasEstimate,
     data: contractData
   };
@@ -128,34 +121,6 @@ function book(
 
   console.log(txhash);
   return txhash;
-}
-
-function getIfBook(contract_address) {
-  const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.ifbook();
-
-  return result;
-}
-
-function getUser(contract_address) {
-  const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.user();
-
-  return result;
-}
-
-function getUserStartTime(contract_address) {
-  const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.validStartTime();
-
-  return result;
-}
-
-function getUserEndTime(contract_address) {
-  const Agreement = eth.contract(contract_abi).at(contract_address);
-  const result = Agreement.validEndTime();
-
-  return result;
 }
 
 function sendMoney(user_address) {
@@ -189,12 +154,56 @@ function sendMoney(user_address) {
   return txhash;
 }
 
+function setLock(user_address, contract_address) {
+  var keyObject = keythereum.importFromFile(eth.coinbase, keydatadir);
+  // generate privateKey from file
+  var privateKey = keythereum.recover("techfin", keyObject); //password and keyObject
+
+  const Agreement = eth.contract(contract_abi).at(contract_address);
+
+  const contractData = Agreement.book.getData(
+    user_address,
+    {
+      data: contract_bytecode
+    }
+  );
+
+  // must info
+  var gasEstimate = 100000; //must for transaction info
+
+  var rawTx = {
+    // nonce => maintain by ourself
+    nonce: web3.eth.getTransactionCount(eth.coinbase),
+    gasLimit: gasEstimate,
+    data: contractData
+  };
+
+  // using ethereumjs-tx function
+  var tx = new Tx(rawTx);
+
+  // sign your transaction
+  tx.sign(privateKey);
+
+  // unknown function need to check
+  var serializedTx = tx.serialize();
+  // console.log(user_address)
+  // console.log(user_password)
+  var txhash = web3.eth.sendRawTransaction("0x" + serializedTx.toString("hex"));
+  // var receipt = web3.eth.getTransactionReceipt(txhash)
+
+  console.log(txhash);
+  return txhash;
+}
+
+function contractEntry(contract_address) {
+  const Agreement = eth.contract(contract_abi).at(contract_address);
+  return Agreement;
+}
+
 module.exports = {
   contractDeploy: contractDeploy,
   sendMoney: sendMoney,
   book: book,
-  getUser: getUser,
-  getIfBook: getIfBook,
-  getUserStartTime: getUserStartTime,
-  getUserEndTime: getUserEndTime
+  contractEntry: contractEntry,
+  setLock: setLock
 };

@@ -7,7 +7,7 @@ var eth = Web3.eth;
 
 var chain = require("./rawtx");
 
-router.use("/", function(req, res, next) {
+router.use("/", function (req, res, next) {
   if (req.session.login != "hidden") {
     res.redirect("/login");
   } else {
@@ -15,11 +15,11 @@ router.use("/", function(req, res, next) {
   }
 });
 
-router.get('/', function(req ,res) {
+router.get('/', function (req, res) {
   res.send("done");
 })
 
-router.get('/ordered/:id', function(req, res) {
+router.get('/ordered/:id', function (req, res) {
   console.log(req.params.id);
 
   var user_id = req.session.user_id;
@@ -27,12 +27,14 @@ router.get('/ordered/:id', function(req, res) {
 
   var todo = doquery("select * from items where id = " + req.params.id, "");
   todo.then(input => {
-    input[0].start_date = new Date(input[0].start_date).toDateString()
-    input[0].end_date = new Date(input[0].end_date).toDateString()
-    
-    var ifbook = chain.getIfBook(input[0].contract_address)
 
-    console.log(input[0])
+    var entry = chain.contractEntry(input[0].contract_address)
+    console.log(input[0].contract_address);
+
+    var ifbook = entry.ifbook();
+
+    console.log("ifbook: " + ifbook)
+
     res.render("book/order", {
       title: "order",
       login: req.session.login,
@@ -45,7 +47,7 @@ router.get('/ordered/:id', function(req, res) {
   })
 })
 
-router.post('/orderaction', function(req, res) {
+router.post('/orderaction', function (req, res) {
   var require_id = req.body.orderId;
   var user_address = req.session.user_address;
   var user_id = req.session.user_id;
@@ -65,32 +67,29 @@ router.post('/orderaction', function(req, res) {
   }
 
   // res.json(data)
-  var txhash = chain.book(
-    contract_address,
-    user_address, 
-    user_password,
-    order_startDate,
-    order_endDate
-  );
-  data.transaction = txhash
+  var entry = chain.contractEntry(contract_address);
 
-  // var previous = doquery("update book set status = 0 where contract_address = " + contract_address, "");
+  entry.book(user_address, {
+    from: eth.coinbase,
+    gas: 100000
+  }, function (err, txhash) {
+    if (!err) {
+      data.transaction = txhash
+      var todo = doquery("INSERT INTO book SET ?", data);
 
-  var todo = doquery("INSERT INTO book SET ?", data);
-
-  todo.then(input => {
-    console.log(input)
-    res.send("done")
-  }).catch(input => {
-    console.log(input)
-    res.send("failed")
+      todo.then(input => {
+        console.log(input)
+        res.send("done")
+      }).catch(input => {
+        console.log(input)
+        res.send("failed")
+      })
+    }
+    else {
+      console.log(err)
+      res.redirect("ordered/:" + require_id);
+    }
   })
-
-  // setTimeout(function() {
-  //   var receipt = Web3.eth.getTransactionReceipt(txhash);
-  //   console.log(receipt);
-  //   res.send("done")
-  // }, 6000)
 })
 
 router.get('/list', (req, res) => {
@@ -110,9 +109,9 @@ router.get('/list', (req, res) => {
 
 router.get("/testing", (req, res) => {
   var contract_address = "0xaec506f54bdb63299a56f54955f16a05a944136a"
-  
+
   var result = chain.getIfBook(contract_address)
-  
+
   res.send(result)
 })
 

@@ -9,7 +9,7 @@ var eth = Web3.eth;
 var chain = require("./rawtx");
 
 //middleware
-router.use("/", function(req, res, next) {
+router.use("/", function (req, res, next) {
   // const todo = doquery(
   //   "select * from users where account = ? && password = ?",
   //   ["fuckinggod", "123456"]
@@ -35,13 +35,13 @@ router.use("/", function(req, res, next) {
   }
 });
 
-router.get("/", function(req, res) {
+router.get("/", function (req, res) {
   res.redirect("/hostmanage/mylist");
 });
 
-router.get("/mylist", function(req, res) {
+router.get("/mylist", function (req, res) {
   var todo = doquery("select * from items where owner = " + req.session.user_id, "");
-  
+
   todo.then(input => {
     res.render("hostmanage/mylist", {
       title: "hostmanage mylist",
@@ -51,14 +51,14 @@ router.get("/mylist", function(req, res) {
   })
 });
 
-router.get("/insert", function(req, res) {
+router.get("/insert", function (req, res) {
   res.render("hostmanage/iteminsert", {
     title: "hostmanage insert",
     login: req.session.login
   });
 });
 
-router.post("/iteminsertdo", function(req, res) {
+router.post("/iteminsertdo", function (req, res) {
 
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
@@ -82,33 +82,36 @@ router.post("/iteminsertdo", function(req, res) {
     data.end_date,
     data.price_perday
   );
-  
+
   data.start_date = new Date(data.start_date)
   data.end_date = new Date(data.end_date)
-  
-  setTimeout(function() {
+
+  setTimeout(function () {
     var receipt = Web3.eth.getTransactionReceipt(txhash);
     data.contract_address = receipt.contractAddress;
     data.block_number = receipt.blockNumber;
     data.gas_used = receipt.gasUsed;
     console.log(receipt);
-    
+
     var todo = doquery("insert into items set ?", data);
     todo.then(input => {
       console.log(input)
     }).catch(input => {
       console.log(input)
     })
-  }, 6000)
+  }, 5000)
 
-  res.redirect("insert");
+  // setTimeout(function () {
+  //   res.redirect("mylist")
+  // }, 6000)
+  res.redirect("mylist")
 });
 
-router.get("/showsession", function(req, res) {
+router.get("/showsession", function (req, res) {
   res.json(req.session);
 });
 
-router.get("/testweb3", function(req, res) {
+router.get("/testweb3", function (req, res) {
   var coinbase = eth.coinbase;
   var coinbaseBalance = eth.getBalance(coinbase);
   console.log(coinbase);
@@ -126,7 +129,7 @@ router.get("/testweb3", function(req, res) {
 //   });
 // })
 
-router.get("/deploytest", function(req, res) {
+router.get("/deploytest", function (req, res) {
   req.session.user_id = 8;
   req.session.user_address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0";
 
@@ -160,13 +163,13 @@ router.get("/deploytest", function(req, res) {
   });
 });
 
-router.get("/sendmoney", function(req, res) {
+router.get("/sendmoney", function (req, res) {
   req.session.address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0";
   var user_address = req.session.address;
   var txhash = chain.sendMoney(req.session.address);
   txhash = txhash.toString();
   console.log(txhash);
-  setTimeout(function() {
+  setTimeout(function () {
     var receipt = Web3.eth.getTransaction(txhash);
     // console.log("after timeout")
     // console.log(txhash)
@@ -174,9 +177,5 @@ router.get("/sendmoney", function(req, res) {
     res.json(receipt);
   }, 4000);
 });
-
-router.get('/sessionshow', function(req, res) {
-  res.json(req.session);
-})
 
 module.exports = router;

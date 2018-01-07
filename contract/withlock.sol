@@ -14,7 +14,7 @@ contract Agreement {
   string public validStartTime;
   string public validEndTime;
 
-  string public lockendblock;
+  string lockendblock;
 
   modifier onlyadmin() {
     require(admin == msg.sender);
@@ -31,12 +31,7 @@ contract Agreement {
     _;
   }
 
-  modifier onlylife() {
-    require(life == true);
-    _;
-  }
-
-  function Agreement(address _host, string _startTime, string  _endTime, uint _price) public payable {
+  function Agreement(address _host, string _startTime, string  _endTime, uint _price) public {
     admin = msg.sender;
 
     host = _host;
@@ -69,5 +64,9 @@ contract Agreement {
 
   function setlock(string _blockNumber) public {
     lockendblock = _blockNumber;
+  }
+
+  function getlock() public onlyadmin onlyhost onlyuser returns (string) {
+    return lockendblock;
   }
 }
