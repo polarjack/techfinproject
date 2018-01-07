@@ -63,7 +63,6 @@ router.post("/iteminsertdo", function(req, res) {
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
   var user_password = req.body.password;
-  
 
   var data = {
     item_name: req.body.itemName,
