@@ -79,7 +79,7 @@ router.post('/orderaction', function (req, res) {
 
       todo.then(input => {
         console.log(input)
-        res.send("done")
+        res.redirect("list");
       }).catch(input => {
         console.log(input)
         res.send("failed")
@@ -96,11 +96,15 @@ router.get('/list', (req, res) => {
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
 
-  var todo = doquery("select * from users inner join book on users.address = book.user_address where book.status = 1 and users.id = " + user_id, "")
-
+  var todo = doquery("select * from items inner join book on items.id = book.item_id where book.status = '1' and book.user_id = " + user_id, "")
+  
   todo.then(input => {
     console.log(input);
-    res.send("done")
+    res.render("book/list", {
+      title: "My Order",
+      login: req.session.login,
+      data: input
+    })
   }).catch(input => {
     console.log(input);
     res.send("failed")

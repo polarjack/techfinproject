@@ -1,0 +1,63 @@
+<html>
+
+<head>
+  <% include ./../header %>
+</head>
+
+<body>
+  <% include ./../navbar %>
+
+    <div class="container">
+      <h1>My Order</h1>
+      <div class="row">
+        <div class="col s12">
+          <% data.map(i => { %>
+            <div class="row">
+              <div class="col s12">
+                <div class="card-panel">
+                  <div class="row">
+                    <div class="col s3">
+                      <img class="materialboxed" src="/images/<%=i.image%>" width="100%" height="">
+                    </div>
+                    <div class="col s8 offset-s1">
+                      <blockquote>
+                        <ul class="left-aligh">
+                          <li class="valign-wrapper">
+                            <%=i.item_name%>
+                          </li>
+                        </ul>
+                      </blockquote>
+                      <blockquote>
+                        <ul class="left-align">
+                          <li class="valign-wrapper">
+                            <i class="material-icons red-text">room</i>&nbsp;
+                            <%=i.location%>
+                          </li>
+                          <li class="valign-wrapper">
+                            <i class="material-icons">polymer</i>&nbsp;
+                            <%=i.contract_address%>
+                          </li>
+                          <li class="valign-wrapper">
+                            <i class="material-icons">check_circle</i>&nbsp;
+                            <%=i.start_date%>
+                              <i class="material-icons">keyboard_arrow_right</i>
+                              <%=i.end_date%>
+                          </li>
+                          <li class="valign-wrapper">
+                            <i class="material-icons">attach_money</i>&nbsp;
+                            <%=i.price_perday%>
+                          </li>
+                        </ul>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%  })%>
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>

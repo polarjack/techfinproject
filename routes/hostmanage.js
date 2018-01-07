@@ -92,12 +92,13 @@ router.post("/iteminsertdo", function (req, res) {
     data.block_number = receipt.blockNumber;
     data.gas_used = receipt.gasUsed;
     console.log(receipt);
-
+    
     var todo = doquery("insert into items set ?", data);
     todo.then(input => {
       console.log(input)
     }).catch(input => {
       console.log(input)
+      
     })
   }, 5000)
 

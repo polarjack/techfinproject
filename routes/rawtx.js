@@ -37,9 +37,9 @@ function contractDeploy(
 ) {
   // Synchronous
   // find file form datadir + '/keystore' => assign file address to import file
-  var keyObject = keythereum.importFromFile(user_address, keydatadir);
+  var keyObject = keythereum.importFromFile(eth.coinbase, keydatadir);
   //generate privateKey from file
-  var privateKey = keythereum.recover(user_password, keyObject); //password and keyObject
+  var privateKey = keythereum.recover("techfin", keyObject); //password and keyObject
 
   //Prepare
   const Agreement = eth.contract(contract_abi);
@@ -57,7 +57,7 @@ function contractDeploy(
 
   var rawTx = {
     //nonce => maintain by ourself
-    nonce: web3.eth.getTransactionCount(user_address),
+    nonce: web3.eth.getTransactionCount(eth.coinbase),
     gasLimit: 1000000,
     data: contractData
   };
