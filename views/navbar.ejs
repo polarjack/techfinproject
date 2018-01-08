@@ -10,10 +10,11 @@
           <a href="/intro">Home</a>
         </li>
         <li>
-       <% if(login != "hidden") {%>
-        <a href="/login">Login</a>
-       <% } else {%>
+       <% if(login == "hidden") {%>
         <a href="/logout">Logout</a>
+        <% } else if(login == "login"){%>
+       <% } else {%>
+        <a href="/login">Login</a>
        <% }%>
       </li>
       </ul>

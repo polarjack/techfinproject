@@ -99,7 +99,7 @@ router.post("/iteminsertdo", function (req, res) {
     }).catch(input => {
       console.log(input)
     })
-  }, 5000)
+  }, 7000)
 
   // setTimeout(function () {
   //   res.redirect("mylist")
@@ -175,7 +175,7 @@ router.get("/sendmoney", function (req, res) {
     // console.log(txhash)
     // console.log(receipt)
     res.json(receipt);
-  }, 4000);
+  }, 6000);
 });
 
 module.exports = router;

@@ -17,28 +17,28 @@ router.get('/', function (req, res, next) {
   res.redirect('list');
 });
 
-router.get('/list', (req, res) => {
-  let query = "select * from users where status = 1";
-  const todo = doquery(query, "");
+// router.get('/list', (req, res) => {
+//   let query = "select * from users where status = 1";
+//   const todo = doquery(query, "");
 
-  todo.then(input => {
-    console.log(input)
-    res.render('users/list', {
-      title: "user list",
-      data: input
-    })
-  }).catch(input => {
-    console.log(input)
-    res.send('404 error')
-  })
-})
+//   todo.then(input => {
+//     console.log(input)
+//     res.render('users/list', {
+//       title: "user list",
+//       data: input
+//     })
+//   }).catch(input => {
+//     console.log(input)
+//     res.send('404 error')
+//   })
+// })
 
 router.get('/showyourself', (req, res) => {
   if(req.session.user_id !== undefined) {
     res.send("your name is " + req.session.name + ", your e-mail is " + req.session.email);
   }
   else {
-    res.redirect('login')
+    res.redirect('/login')
   }
   res.send("show")
 })
