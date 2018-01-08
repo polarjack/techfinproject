@@ -17,38 +17,51 @@
                 <div class="card-panel">
                   <div class="row">
                     <div class="col s3">
-                      <img class="materialboxed" src="/images/<%=i.image%>" width="100%" height="">
+                      <img class="materialboxed" src="/images/<%=i.image%>" width="80%" height="">
                     </div>
                     <div class="col s8 offset-s1">
-                      <blockquote>
-                        <ul class="left-aligh">
-                          <li class="valign-wrapper">
-                            <%=i.item_name%>
-                          </li>
-                        </ul>
-                      </blockquote>
-                      <blockquote>
-                        <ul class="left-align">
-                          <li class="valign-wrapper">
-                            <i class="material-icons red-text">room</i>&nbsp;
-                            <%=i.location%>
-                          </li>
-                          <li class="valign-wrapper">
-                            <i class="material-icons">polymer</i>&nbsp;
-                            <%=i.contract_address%>
-                          </li>
-                          <li class="valign-wrapper">
-                            <i class="material-icons">check_circle</i>&nbsp;
-                            <%=i.start_date%>
-                              <i class="material-icons">keyboard_arrow_right</i>
-                              <%=i.end_date%>
-                          </li>
-                          <li class="valign-wrapper">
-                            <i class="material-icons">attach_money</i>&nbsp;
-                            <%=i.price_perday%>
-                          </li>
-                        </ul>
-                      </blockquote>
+
+                      <div class="row">
+                        <div class="col s12">
+                          <blockquote>
+                            <ul class="left-aligh">
+                              <li class="valign-wrapper">
+                                <%=i.item_name%>
+                              </li>
+                            </ul>
+                          </blockquote>
+                          <blockquote>
+                            <ul class="left-align">
+                              <li class="valign-wrapper">
+                                <i class="material-icons red-text">room</i>&nbsp;
+                                <b>Location:</b> &nbsp;
+                                <%=i.location%>
+                              </li>
+                              <li class="valign-wrapper">
+                                <i class="material-icons green-text">check_circle</i>&nbsp;
+                                <b>Order Time:</b> &nbsp;
+                                <%=i.start_datev2%>
+                                  <i class="material-icons">keyboard_arrow_right</i>
+                                  <%=i.end_datev2%>
+                              </li>
+                              <br>
+                              <li class="valign-wrapper">
+                                <i class="material-icons yellow-text">attach_money</i>&nbsp;
+                                <b>Price Per Day: </b> &nbsp;
+                                <%=i.price_perday%>
+                              </li>
+                            </ul>
+                          </blockquote>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col s2 offset-s8">
+                          <button class="btn waves-effect right red" onclick="cancel('<%=i.user_address%>', '<%=i.contract_address%>')">Cancel</button>
+                        </div>
+                        <div class="col s2">
+                          <button class="btn waves-effect right" onclick="opendoor('<%=i.user_address%>', '<%=i.contract_address%>')">Open Lock</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -58,6 +71,98 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal Structure -->
+    <div id="openlock" class="modal">
+      <div class="modal-content">
+        <div class="container">
+          <h5 class="center-align">Let's Go</h5>
+          <div class="row">
+            <div class="col s6 offset-s3 cente-align">
+              <div id="qrcode" style="width: 100%; height: 100%;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action waves-effect waves-green btn-flat modal-close">Close</a>
+      </div>
+    </div>
+
+    <div id="cancel" class="modal">
+      <div class="modal-content">
+        <div class="container">
+          <h5>Comfirm Password</h5>
+          <div class="row">
+            <div class="col s12">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input type="text" id="password" name="password">
+                  <label for="password">Password</label>
+                </div>
+              </div>
+            </div>
+            <input type="text" id="user_address" name="user_address" hidden>
+            <input type="text" id="contract_address" name="contract_address" hidden>
+          </div>
+        </div>
+      </div>
+      <!-- modal-content end -->
+      <div class="modal-footer">
+        <a href="#!" class="modal-action waves-effect waves-green btn-flat" onclick="checkpassword()">Close</a>
+      </div>
+    </div>
+
 </body>
+
+<script type="text/javascript" src="/javascript/qrcode.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('.modal').modal();
+  });
+
+  function cancel(user_address, contract_address) {
+    $("#user_address").val(user_address)
+    $("#contract_address").val(contract_address)
+    $('#cancel').modal('open');
+  }
+
+  function checkpassword() {
+    var user_address = $("#user_address").val()
+    var contract_address = $("#contract_address").val()
+    var password = $("#password").val()
+
+    console.log(user_address, contract_address, password);
+
+
+    $('#cancel').modal('close');
+    $.get("/book/cancel", {
+      user_address: user_address,
+      contract_address: contract_address,
+      password: password
+    }, function (data) {
+      console.log(data)
+      location.reload();
+    })
+    // alert("cancel")
+  }
+
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    width: 400,
+    height: 400,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+  });
+
+  function opendoor(user_address, contract_address) {
+    var togo = "http://140.119.163.105:9000/unlock?user_address=" + user_address + "&contract_address=" +
+      contract_address;
+    qrcode.clear();
+    qrcode.makeCode(togo);
+
+    $('#openlock').modal('open');
+  }
+</script>
 
 </html>

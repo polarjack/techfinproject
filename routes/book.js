@@ -96,7 +96,7 @@ router.get('/list', (req, res) => {
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
 
-  var todo = doquery("select * from items inner join book on items.id = book.item_id where book.status = '1' and book.user_id = " + user_id, "")
+  var todo = doquery("select *, book.start_date as start_datev2, book.end_date as end_datev2 from items inner join book on items.id = book.item_id where items.status = '1' and book.status = '1' and book.user_id = " + user_id, "")
   
   todo.then(input => {
     console.log(input);
@@ -111,13 +111,57 @@ router.get('/list', (req, res) => {
   })
 })
 
-router.get("/testing", (req, res) => {
-  var contract_address = "0xaec506f54bdb63299a56f54955f16a05a944136a"
+router.get('/cancel', (req, res) => {
+  console.log("cancel");
 
-  var result = chain.getIfBook(contract_address)
+  console.log(req.query.user_address);
+  console.log(req.query.contract_address);
+  console.log(req.query.password);
+  
 
-  res.send(result)
+  var user_address = req.session.user_address;
+  var contract_address = req.query.contract_address;
+  var password = req.query.password;
+
+  var entry = chain.contractEntry(contract_address)
+
+  entry.cancel(user_address, {
+    from: eth.coinbase,
+    gas: 1000000
+  }, function(err, txhash) {
+    if(!err) {
+      var todo = doquery("update book set status = '0' where user_address = ? and contract_address = ?", [user_address, contract_address]);
+      todo.then(input => {
+        res.json({
+          status: "done"
+        })
+        console.log(input)
+      }).catch(input => {
+        res.json({
+          status: "failed"
+        })
+        console.log(input)
+      })
+      res.json({
+        status: "done"
+      })
+    }
+    else {
+      res.json({
+        status: "failed"
+      })
+    }
+  })
 })
+
+router.get("/testing", (req, res) => {
+  var a = req.query.a;
+  var b = req.query.b;
+  console.log(a, b)
+  
+  res.send(a+b)
+})
+
 
 // router.get('/testcontract', function(req, res) {
 //   var user_address = req.session.user_address;

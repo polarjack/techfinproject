@@ -76,12 +76,44 @@ router.get('/travel', function(req, res) {
       data: input
     })
   })
-  
 })
 
-router.get('/showsession', function(req, res) {
-  res.json(req.session)
+router.get('/insert', (req, res) => {
+  res.render('users/insert', {
+    title: 'Insert User',
+    login: req.session.login
+  })
 })
+
+router.post('/insertAction', (req, res) => {
+  var ethinfo = getNewAddress(req.body.password)
+
+  var dbinput = {
+    account: req.body.account,
+    password: req.body.password,
+    email: req.body.email
+  }
+
+  dbinput.address = ethinfo.address;
+  dbinput.privateKey = '0x' + ethinfo.privateKey.toString('hex');
+
+  // res.json(dbinput)
+  const todo = doquery("insert into users set ?", dbinput, function(err) {
+    if(err) throw err;  
+  })
+
+  todo.then(input => {
+    console.log(input);
+    res.redirect('/users/list');
+  }).catch(input => {
+    console.log(input);
+    res.redirect('/users/insert');
+  })
+})
+
+// router.get('/showsession', function(req, res) {
+//   res.json(req.session)
+// })
 
 
 // router.get('/unlockdo', function(req, res) {

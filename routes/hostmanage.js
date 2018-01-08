@@ -98,7 +98,6 @@ router.post("/iteminsertdo", function (req, res) {
       console.log(input)
     }).catch(input => {
       console.log(input)
-      
     })
   }, 5000)
 
