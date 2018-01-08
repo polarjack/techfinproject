@@ -1,7 +1,7 @@
 <div class="navbar-fixed">
   <nav>
-    <div class="nav-wrapper light-blue">
-      <a href="#!" class="brand-logo">Logo</a>
+    <div class="nav-wrapper blue darken-3">
+      <a href="#!" class="brand-logo"><img class="logo-img" src="/images/techfinlogov1.png" alt=""></a>
       <ul class="right hide-on-med-and-down">
         <li>
           <a href="/book/list">Ordered</a>
@@ -9,9 +9,13 @@
         <li>
           <a href="/intro">Home</a>
         </li>
-        <li <%=login %> >
-          <a href="/login">Login</a>
-        </li>
+        <li>
+       <% if(login != "hidden") {%>
+        <a href="/login">Login</a>
+       <% } else {%>
+        <a href="/logout">Logout</a>
+       <% }%>
+      </li>
       </ul>
     </div>
   </nav>

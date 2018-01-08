@@ -3,6 +3,7 @@ var router = express.Router();
 // var http = require('http');
 
 var doquery = require('../config/dbconfig');
+var getNewAddress = require('../store/generateKeyFile');
 
 /* GET home page. */
 // smaple page
@@ -104,11 +105,15 @@ router.post('/insertAction', (req, res) => {
 
   todo.then(input => {
     console.log(input);
-    res.redirect('/users/list');
+    res.redirect('/users/showyourself');
   }).catch(input => {
     console.log(input);
     res.redirect('/users/insert');
   })
+})
+
+router.get('/myinfo', function(req,res) {
+  
 })
 
 // router.get('/showsession', function(req, res) {
