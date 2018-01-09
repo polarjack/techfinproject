@@ -9,7 +9,7 @@ var eth = Web3.eth;
 
 var getBalance = require("./getUserBalance")
 
-var chain = require("./rawtx");
+var LockPay = require("./lockpay");
 
 //middleware
 router.use("/", function (req, res, next) {
@@ -101,11 +101,9 @@ router.post("/iteminsertdo", function (req, res) {
   console.log(data)
   // var todo = doquery("insert into items into ?", data);
 
-  var txhash = chain.contractDeploy(
+  var txhash = LockPay.deploy(
     user_address,
     user_password, // need to fix
-    data.start_date,
-    data.end_date,
     data.price_perday
   );
 
@@ -117,20 +115,23 @@ router.post("/iteminsertdo", function (req, res) {
     data.contract_address = receipt.contractAddress;
     data.block_number = receipt.blockNumber;
     data.gas_used = receipt.gasUsed;
-    console.log(receipt);
+    data.balance = eth.getBalance(receipt.contractAddress).toString();
 
-    var todo = doquery("insert into items set ?", data);
-    todo.then(input => {
-      console.log(input)
-    }).catch(input => {
-      console.log(input)
-    })
+    console.log(data);
+
+    // var todo = doquery("insert into items set ?", data);
+    // todo.then(input => {
+    //   console.log(input)
+    // }).catch(input => {
+    //   console.log(input)
+    // })
   }, 7000)
 
   // setTimeout(function () {
   //   res.redirect("mylist")
   // }, 6000)
-  res.redirect("mylist")
+  res.send("done")
+  // res.redirect("mylist")
 });
 
 router.get("/showsession", function (req, res) {
@@ -155,39 +156,39 @@ router.get("/testweb3", function (req, res) {
 //   });
 // })
 
-router.get("/deploytest", function (req, res) {
-  req.session.user_id = 8;
-  req.session.user_address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0";
+// router.get("/deploytest", function (req, res) {
+//   req.session.user_id = 8;
+//   req.session.user_address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0";
 
-  var todo = doquery(
-    "select * from users where id = " + req.session.user_id,
-    ""
-  );
+//   var todo = doquery(
+//     "select * from users where id = " + req.session.user_id,
+//     ""
+//   );
 
-  var user_address = req.session.user_address;
-  var start_date = new Date(1512452936000);
-  var end_date = new Date(1516452936000);
-  // start_date = start_date.toISOString();
-  // end_date = end_date.toISOString();
+//   var user_address = req.session.user_address;
+//   var start_date = new Date(1512452936000);
+//   var end_date = new Date(1516452936000);
+//   // start_date = start_date.toISOString();
+//   // end_date = end_date.toISOString();
 
-  var price_perday = 300;
+//   var price_perday = 300;
 
-  // var counting = eth.getTransactionCount(user_address);
+//   // var counting = eth.getTransactionCount(user_address);
 
-  console.log(start_date.toDateString());
-  console.log(end_date.toDateString());
+//   console.log(start_date.toDateString());
+//   console.log(end_date.toDateString());
 
-  todo.then(input => {
-    var result = chain.contractDeploy(
-      user_address,
-      input[0].password,
-      start_date,
-      end_date,
-      price_perday
-    );
-    res.send("done");
-  });
-});
+//   todo.then(input => {
+//     var result = chain.contractDeploy(
+//       user_address,
+//       input[0].password,
+//       start_date,
+//       end_date,
+//       price_perday
+//     );
+//     res.send("done");
+//   });
+// });
 
 router.get("/sendmoney", function (req, res) {
   req.session.address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0";

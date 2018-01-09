@@ -14,22 +14,7 @@ contract LockPay {
   
   string public lockendblock;
 
-  modifier onlyadmin() {
-    require(admin == msg.sender);
-    _;
-  }
-
-  modifier onlyhost() {
-    require(host == msg.sender);
-    _;
-  }
-
-  modifier onlyuser() {
-    require(user == msg.sender);
-    _;
-  }
-
-  function lockPay (address _host, uint _price) public payable {
+  function LockPay (address _host, uint _price) public payable {
     admin = msg.sender;
     promiseMoney = msg.value;
 
@@ -39,7 +24,7 @@ contract LockPay {
     life = true;
     ifbook = false;
 
-    lockendblock = "null";
+    lockendblock = "0";
   }
 
   function book(address _user) public payable {
@@ -64,7 +49,7 @@ contract LockPay {
       host.transfer(promiseMoney);
     }
   }
-  
+
   function setlock(string _blockNumber) public payable {
     require(ifbook == true);
     require(msg.sender == user);
