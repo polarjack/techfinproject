@@ -46,7 +46,9 @@ router.get("/mylist", function (req, res) {
     res.render("hostmanage/mylist", {
       title: "hostmanage mylist",
       login: req.session.login,
-      items: input
+      items: input,
+
+      balance: req.session.user_balance
     });
   })
 });
@@ -54,7 +56,9 @@ router.get("/mylist", function (req, res) {
 router.get("/insert", function (req, res) {
   res.render("hostmanage/iteminsert", {
     title: "hostmanage insert",
-    login: req.session.login
+    login: req.session.login,
+
+    balance: req.session.user_balance
   });
 });
 
@@ -92,7 +96,7 @@ router.post("/iteminsertdo", function (req, res) {
     data.block_number = receipt.blockNumber;
     data.gas_used = receipt.gasUsed;
     console.log(receipt);
-    
+
     var todo = doquery("insert into items set ?", data);
     todo.then(input => {
       console.log(input)

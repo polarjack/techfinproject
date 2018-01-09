@@ -25,15 +25,17 @@ router.get('/', function (req, res, next) {
 router.get('/login', function (req, res) {
   res.render('userlogin', {
     title: "login",
-    login: "login"
+    login: "login",
+    balance: "login"
   })
 })
 
 router.post('/verify', (req, res) => {
   console.log(req.body)
-  const todo = doquery("select * from users where account = ? && password = ?", [req.body.account, req.body.password])
+  const todo = doquery("select * from users where account = ? and password = ?", [req.body.account, req.body.password])
 
   todo.then(input => {
+
     console.log(input)
 
     //express-session setting
@@ -62,7 +64,12 @@ function getBalance(user_address) {
   user_balance = web3.fromWei(user_balance, 'ether')
 
   console.log(user_balance)
-  return user_balance;
+
+  var temp = new Number(user_balance)
+  temp = temp.toFixed(4).toString()
+  
+  console.log(temp)
+  return temp;
 }
 
 router.get('/logout', (req, res) => {
@@ -77,7 +84,8 @@ router.get('/logout', (req, res) => {
 router.get('/intro', function (req, res) {
   res.render('intro', {
     title: 'Intro',
-    login: req.session.login
+    login: req.session.login,
+    balance: req.session.user_balance
   })
 })
 
@@ -91,7 +99,8 @@ router.get('/travel', function (req, res) {
     res.render('travel', {
       title: "travel",
       login: req.session.login,
-      data: input
+      data: input,
+      balance: req.session.user_balance
     })
   })
 })
@@ -99,7 +108,8 @@ router.get('/travel', function (req, res) {
 router.get('/insert', (req, res) => {
   res.render('users/insert', {
     title: 'Insert User',
-    login: req.session.login
+    login: req.session.login,
+    balance: req.session.user_balance
   })
 })
 
@@ -160,7 +170,8 @@ router.get('/myinfo', function (req, res) {
   res.render('users/info', {
     title: "users info",
     login: req.session.login,
-    filename: newplace
+    filename: newplace,
+    balance: req.session.user_balance
   })
 })
 
@@ -186,6 +197,29 @@ router.get('/remove', (req, res) => {
   // req.session.destroy()
 
   res.redirect("logout")
+})
+
+router.get("/givememoney", (req, res) => {
+  if (req.session.login != "hidden") {
+    res.redirect("login");
+  }
+  // if(req.session.balance > 100) {
+  //   res.redirect("intro")
+  // }
+  var result = web3.eth.sendTransaction({
+    from: eth.coinbase, 
+    to: req.session.user_address,
+    value: web3.toWei('100', 'ether'),
+    gas: 1000000
+  })
+
+  console.log(result);
+
+  setTimeout(() => {
+    console.log("update")
+    req.session.user_balance = getBalance(req.session.user_address)
+    res.redirect("intro")
+  }, 7000)
 })
 
 function findKeyfile(keystore, address, files) {

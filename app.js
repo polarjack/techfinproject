@@ -17,7 +17,7 @@ var contracttest = require('./routes/contracttest');
 var book = require('./routes/book');
 
 var app = express();
-var port = 3000
+var port = 8000
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

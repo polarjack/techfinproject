@@ -16,84 +16,80 @@
       </div>
       <div class="row">
         <div class="col s12">
-          <div class="card-panel">
+          <div class="card horizontal">
 
-            <div class="row">
-              <div class="col s3">
-                <img class="materialboxed" src="/images/<%=data.image%>" width="100%" height="">
-              </div>
-              <div class="col s8 offset-s1">
-                <div class="row">
-                  <blockquote>
-                    <ul>
-                      <li class="valign-wrapper">
-                        <i class="material-icons red-text">room</i>
-                        <b>Location:</b> &nbsp;
-                        <%=data.location%>
-                      </li>
-                      <li class="valign-wrapper">
-                        <i class="material-icons blue-text">watch_later</i>
-                        <b>Available Date:</b> &nbsp;
-                        <%=data.start_date%>
-                          <i class="material-icons">keyboard_arrow_right</i>
-                          <%=data.end_date%>
-                      </li>
-                      <br>
-                      <li class="valign-wrapper">
-                        <i class="material-icons yellow-text">attach_money</i>
-                        <b>Price Per Day: </b> &nbsp; NTD $
-                        <%=data.price_perday%>
-                      </li>
-                    </ul>
-                  </blockquote>
-                </div>
-                <div class="row">
-                  <blockquote v-if="<%=ifbook%> == false">
-                    <ul>
-                      <li class="valign-wrapper">
-                        <i class="material-icons green-text">check_circle</i>&nbsp;
-                        <b>Still Available</b>
-                      </li>
-                    </ul>
-                  </blockquote>
+            <div class="card-image">
+              <img class="materialboxed" src="/images/<%=data.image%>" height="400px" width="">
+            </div>
+            <div class="card-stacked">
+              <div class="card-content">
+                <blockquote>
+                  <ul>
+                    <li class="valign-wrapper">
+                      <i class="material-icons red-text">room</i>
+                      <b>Location:</b> &nbsp;
+                      <%=data.location%>
+                    </li>
+                    <li class="valign-wrapper">
+                      <i class="material-icons blue-text">watch_later</i>
+                      <b>Available Date:</b> &nbsp;
+                      <%=data.start_date%>
+                        <i class="material-icons">keyboard_arrow_right</i>
+                        <%=data.end_date%>
+                    </li>
+                    <br>
+                    <li class="valign-wrapper">
+                      <i class="material-icons yellow-text">attach_money</i>
+                      <b>Price Per Day: </b> &nbsp; NTD $
+                      <%=data.price_perday%>
+                    </li>
+                  </ul>
+                </blockquote>
 
-                  <blockquote v-else>
-                    <ul>
-                      <li class="valign-wrapper">
-                        <i class="material-icons red-text">check_circle</i>&nbsp;
-                        <b>Booked</b>
-                      </li>
-                    </ul>
-                  </blockquote>
-                </div>
-                <div class="row" v-show="<%=ifbook%> == false">
-                  <blockquote>
-                    <form action="/book/orderaction" id="orderedform" method="post">
-                      <div class="row">
-                        <div class="input-field col s3">
-                          <input type="text" id="startDate" name="startDate" v-on:change="updateStart" class="datepicker">
-                          <label for="startDate">Start</label>
-                        </div>
-                        <div class="col s1" style="margin-top: 30px;">
-                          <i class="material-icons md-48 blue-text">trending_flat</i>
-                        </div>
-                        <div class="input-field col s3">
-                          <input type="text" id="endDate" name="endDate" v-on:change="updateEnd" class="datepicker">
-                          <label for="endDate">End</label>
-                        </div>
-                        <input type="number" id="pricePerDay" name="pricePerDay" hidden value=<%=data.price_perday%>>
+                <blockquote v-if="<%=ifbook%> == false">
+                  <ul>
+                    <li class="valign-wrapper">
+                      <i class="material-icons green-text">check_circle</i>&nbsp;
+                      <b>Still Available</b>
+                    </li>
+                  </ul>
+                </blockquote>
+
+                <blockquote v-else>
+                  <ul>
+                    <li class="valign-wrapper">
+                      <i class="material-icons red-text">check_circle</i>&nbsp;
+                      <b>Booked</b>
+                    </li>
+                  </ul>
+                </blockquote>
+                <blockquote v-show="<%=ifbook%> == false">
+                  <form action="/book/orderaction" id="orderedform" method="post">
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <input type="text" id="startDate" name="startDate" v-on:change="updateStart" class="datepicker">
+                        <label for="startDate">Start</label>
                       </div>
-
-                      <input hidden type="text" id="passwordConfirm" name="passwordComfirm">
-                      <input hidden type="text" id="orderId" name="orderId" value=<%=data.id%> >
-                      <input hidden type="text" id="contractAddress" name="contractAddress" value=<%=data.contract_address%>>
-
-                    </form>
-                    <div class="valign-wrapper">
-                      <i class="material-icons amber-text">attach_money</i>&nbsp; {{ toshow }}
+                      <div class="col s1" style="margin-top: 30px;">
+                        <i class="material-icons md-48 blue-text">trending_flat</i>
+                      </div>
+                      <div class="input-field col s3">
+                        <input type="text" id="endDate" name="endDate" v-on:change="updateEnd" class="datepicker">
+                        <label for="endDate">End</label>
+                      </div>
+                      <input type="number" id="pricePerDay" name="pricePerDay" hidden value=<%=data.price_perday%>>
                     </div>
-                  </blockquote>
-                </div>
+
+                    <input hidden type="text" id="passwordConfirm" name="passwordComfirm">
+                    <input hidden type="text" id="orderId" name="orderId" value=<%=data.id%> >
+                    <input hidden type="text" id="contractAddress" name="contractAddress" value=<%=data.contract_address%>>
+
+                  </form>
+                  <div class="valign-wrapper">
+                    <i class="material-icons amber-text">attach_money</i>&nbsp; {{ toshow }}
+                  </div>
+                </blockquote>
+
               </div>
             </div>
           </div>

@@ -38,6 +38,7 @@ router.get('/ordered/:id', function (req, res) {
     res.render("book/order", {
       title: "order",
       login: req.session.login,
+      balance: req.session.user_balance,
       data: input[0],
       ifbook: ifbook
     })
@@ -84,8 +85,7 @@ router.post('/orderaction', function (req, res) {
         console.log(input)
         res.send("failed")
       })
-    }
-    else {
+    } else {
       console.log(err)
       res.redirect("ordered/:" + require_id);
     }
@@ -97,13 +97,15 @@ router.get('/list', (req, res) => {
   var user_address = req.session.user_address;
 
   var todo = doquery("select *, book.start_date as start_datev2, book.end_date as end_datev2 from items inner join book on items.id = book.item_id where items.status = '1' and book.status = '1' and book.user_id = " + user_id, "")
-  
+
   todo.then(input => {
     console.log(input);
     res.render("book/list", {
       title: "My Order",
       login: req.session.login,
-      data: input
+      data: input,
+
+      balance: req.session.user_balance
     })
   }).catch(input => {
     console.log(input);
@@ -117,7 +119,7 @@ router.get('/cancel', (req, res) => {
   console.log(req.query.user_address);
   console.log(req.query.contract_address);
   console.log(req.query.password);
-  
+
 
   var user_address = req.session.user_address;
   var contract_address = req.query.contract_address;
@@ -128,8 +130,8 @@ router.get('/cancel', (req, res) => {
   entry.cancel(user_address, {
     from: eth.coinbase,
     gas: 1000000
-  }, function(err, txhash) {
-    if(!err) {
+  }, function (err, txhash) {
+    if (!err) {
       var todo = doquery("update book set status = '0' where user_address = ? and contract_address = ?", [user_address, contract_address]);
       todo.then(input => {
         res.json({
@@ -145,8 +147,7 @@ router.get('/cancel', (req, res) => {
       res.json({
         status: "done"
       })
-    }
-    else {
+    } else {
       res.json({
         status: "failed"
       })
@@ -158,8 +159,8 @@ router.get("/testing", (req, res) => {
   var a = req.query.a;
   var b = req.query.b;
   console.log(a, b)
-  
-  res.send(a+b)
+
+  res.send(a + b)
 })
 
 

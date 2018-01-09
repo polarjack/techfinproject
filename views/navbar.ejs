@@ -1,23 +1,56 @@
-<div class="navbar-fixed">
-  <nav>
-    <div class="nav-wrapper blue darken-3">
-      <a href="#!" class="brand-logo"><img class="logo-img" src="/images/techfinlogov1.png" alt=""></a>
-      <ul class="right hide-on-med-and-down">
+<nav>
+  <div class="nav-wrapper blue darken-3">
+    <a href="/intro" class="brand-logo">
+      <img class="logo-img" src="/images/techfinlogov1.png" alt="">
+    </a>
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger">
+      <i class="material-icons">menu</i>
+    </a>
+    <ul class="right hide-on-med-and-down">
+
+
+
+
+      <% if(login == "hidden") {%>
         <li>
-          <a href="/book/list">Ordered</a>
+          <a href="/givememoney">
+            <i class="material-icons left">account_circle</i>
+            <%=balance%>
+          </a>
         </li>
-        <li>
-          <a href="/intro">Home</a>
-        </li>
-        <li>
-       <% if(login == "hidden") {%>
-        <a href="/logout">Logout</a>
-        <% } else if(login == "login"){%>
-       <% } else {%>
-        <a href="/login">Login</a>
-       <% }%>
+
+        <% } %>
+          <li>
+            <a href="/book/list">Ordered</a>
+          </li>
+          <li>
+            <a href="/intro">Home</a>
+          </li>
+          <li>
+            <% if(login == "hidden") {%>
+              <a href="/logout">Logout</a>
+              <% } else if(login == "login"){%>
+                <% } else {%>
+                  <a href="/login">Login</a>
+                  <% }%>
+          </li>
+    </ul>
+
+    <ul class="sidenav" id="mobile-demo">
+      <li>
+        <a href="/book/list">Ordered</a>
       </li>
-      </ul>
-    </div>
-  </nav>
-</div>
+      <li>
+        <a href="/intro">Home</a>
+      </li>
+      <li>
+        <% if(login == "hidden") {%>
+          <a href="/logout">Logout</a>
+          <% } else if(login == "login"){%>
+            <% } else {%>
+              <a href="/login">Login</a>
+              <% }%>
+      </li>
+    </ul>
+  </div>
+</nav>
