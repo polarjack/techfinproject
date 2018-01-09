@@ -158,6 +158,7 @@
   function opendoor(user_address, contract_address) {
     var togo = "http://140.119.163.105:9000/unlock?user_address=" + user_address + "&contract_address=" +
       contract_address;
+    togo = "http://140.119.164.140:8080/unlock"
     qrcode.clear();
     qrcode.makeCode(togo);
 

@@ -180,7 +180,7 @@ router.get('/remove', (req, res) => {
   // var user_address = "0x7bb2b8512feffb423ae62618042c9ca50f4467f9";
 
   var address = user_address.replace("0x", "");
-  var basepath = path.dirname(require.main.filename);;
+  var basepath = path.dirname(require.main.filename);
   var keystore = path.join(basepath, "store/keystore");
   // var filename = __dirname;
   var filename = findKeyfile(keystore, address, fs.readdirSync(keystore));

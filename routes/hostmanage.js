@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var path = require("path")
 
 var doquery = require("../config/dbconfig");
 var Web3 = require("../config/web3");
@@ -67,6 +68,20 @@ router.post("/iteminsertdo", function (req, res) {
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
   var user_password = req.body.password;
+  var image = req.files.filetoupload;
+
+  // console.log(image.name)
+
+  var basepath = path.dirname(require.main.filename);
+  
+  image.mv(basepath + '/public/images/' + image.name, function(err) {
+    if(!err) {
+      console.log("done")
+    }
+    else {
+      console.log(err)
+    }
+  })
 
   var data = {
     item_name: req.body.itemName,
@@ -74,9 +89,11 @@ router.post("/iteminsertdo", function (req, res) {
     price_perday: req.body.pricePerDay,
     start_date: req.body.startDate,
     end_date: req.body.endDate,
-    owner: user_id
+    owner: user_id,
+    image: image.name
   };
 
+  console.log(data)
   // var todo = doquery("insert into items into ?", data);
 
   var txhash = chain.contractDeploy(
