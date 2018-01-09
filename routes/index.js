@@ -8,6 +8,7 @@ var doquery = require('../config/dbconfig');
 var getNewAddress = require('../store/generateKeyFile');
 var web3 = require("./../config/web3");
 var eth = web3.eth;
+var BigNumber = require("bignumber.js")
 
 /* GET home page. */
 // smaple page
@@ -41,6 +42,8 @@ router.post('/verify', (req, res) => {
       req.session.name = input[0].name
       req.session.email = input[0].email
       req.session.user_address = input[0].address
+      req.session.user_balance = getBalance(input[0].address)
+
       req.session.login = "hidden"
       res.redirect('/intro')
     } else {
@@ -52,6 +55,15 @@ router.post('/verify', (req, res) => {
     res.json("error")
   })
 })
+
+function getBalance(user_address) {
+  var user_balance = eth.getBalance(user_address)
+  user_balance = user_balance.toNumber()
+  user_balance = web3.fromWei(user_balance, 'ether')
+
+  console.log(user_balance)
+  return user_balance;
+}
 
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -141,8 +153,8 @@ router.get('/myinfo', function (req, res) {
   var newplace = filename.replace("store", "public")
   console.log(newplace)
   fs.createReadStream(filename).pipe(fs.createWriteStream(newplace));
-  
-  newplace = newplace.replace(basepath+ "/public", "")
+
+  newplace = newplace.replace(basepath + "/public", "")
   console.log(newplace)
 
   res.render('users/info', {
