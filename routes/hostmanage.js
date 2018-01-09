@@ -7,6 +7,8 @@ var Web3 = require("../config/web3");
 var eth = Web3.eth;
 // var deployContract = require('')
 
+var getBalance = require("./getUserBalance")
+
 var chain = require("./rawtx");
 
 //middleware
@@ -29,9 +31,12 @@ router.use("/", function (req, res, next) {
   //   }
   //   next();
   // });
+  
   if (req.session.login != "hidden") {
     res.redirect("../login");
   } else {
+    req.session.user_balance = getBalance(req.session.user_address);
+
     next();
   }
 });

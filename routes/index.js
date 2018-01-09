@@ -9,6 +9,8 @@ var getNewAddress = require('../store/generateKeyFile');
 var web3 = require("./../config/web3");
 var eth = web3.eth;
 var BigNumber = require("bignumber.js")
+var getBalance = require("./getUserBalance");
+
 
 /* GET home page. */
 // smaple page
@@ -57,20 +59,6 @@ router.post('/verify', (req, res) => {
     res.json("error")
   })
 })
-
-function getBalance(user_address) {
-  var user_balance = eth.getBalance(user_address)
-  user_balance = user_balance.toNumber()
-  user_balance = web3.fromWei(user_balance, 'ether')
-
-  console.log(user_balance)
-
-  var temp = new Number(user_balance)
-  temp = temp.toFixed(4).toString()
-  
-  console.log(temp)
-  return temp;
-}
 
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -130,12 +118,14 @@ router.post('/insertAction', (req, res) => {
     if (err) throw err;
   })
 
-  eth.sendTransaction({
+  var txhash = eth.sendTransaction({
     from: eth.coinbase,
-    gas: 900000,
+    gas: 2000000,
     to: ethinfo.address,
-    value: web3.toWei('1000000', 'ether')
+    value: web3.toWei('5000', 'ether')
   })
+  console.log(txhash)
+
   req.session.importantlink = ethinfo.address;
 
   todo.then(input => {
@@ -149,6 +139,7 @@ router.post('/insertAction', (req, res) => {
 
 router.get('/myinfo', function (req, res) {
   var user_address = req.session.importantlink;
+  
   // var user_address = "0x7bb2b8512feffb423ae62618042c9ca50f4467f9";
 
   var address = user_address.replace("0x", "");
@@ -156,7 +147,7 @@ router.get('/myinfo', function (req, res) {
   var keystore = path.join(basepath, "store/keystore");
   // var filename = __dirname;
   var filename = findKeyfile(keystore, address, fs.readdirSync(keystore));
-  console.log(filename);
+  // console.log(filename);
   // filename = filename.replace(basepath, "");
   // res.send(filename)
 
@@ -203,9 +194,9 @@ router.get("/givememoney", (req, res) => {
   if (req.session.login != "hidden") {
     res.redirect("login");
   }
-  // if(req.session.balance > 100) {
-  //   res.redirect("intro")
-  // }
+  if(req.session.balance > 500) {
+    res.redirect("intro")
+  }
   var result = web3.eth.sendTransaction({
     from: eth.coinbase, 
     to: req.session.user_address,
