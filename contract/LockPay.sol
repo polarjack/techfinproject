@@ -1,13 +1,15 @@
 pragma solidity ^0.4.11;
 
-contract Agreement {
+contract LockPay {
   address public admin;
   bool public life;
+  uint public promiseMoney;
 
   address public host;
   uint public pricePerDay;
+  uint public userPay;
   bool public ifbook;
-  
+
   address public user;
   
   string public lockendblock;
@@ -27,8 +29,9 @@ contract Agreement {
     _;
   }
 
-  function Lock(address _host, uint _price) public {
+  function lockPay (address _host, uint _price) public payable {
     admin = msg.sender;
+    promiseMoney = msg.value;
 
     host = _host;
     pricePerDay = _price;
@@ -39,22 +42,34 @@ contract Agreement {
     lockendblock = "null";
   }
 
-  function book(address _user) public {
+  function book(address _user) public payable {
+    userPay = msg.value;
     user = _user;
     ifbook = true;
   }
 
-  function cancel(address _user) public {
-    require(user == _user);
-    user = 0x0;
+  function cancel() public {
+    require(msg.sender == user);
     ifbook = false;
+
+    user.transfer(userPay);
+    user = 0x0;
   }
 
   function disableContract() public {
-    life = false;
-  }
+    require(msg.sender == host || msg.sender == admin);
 
+    life = false;
+    if (host != address(0)) {  
+      host.transfer(promiseMoney);
+    }
+  }
+  
   function setlock(string _blockNumber) public payable {
+    require(ifbook == true);
+    require(msg.sender == user);
     lockendblock = _blockNumber;
   }
+
+  function () public payable { }
 }
