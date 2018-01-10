@@ -66,10 +66,10 @@ function book(user_address, user_password, contract_address) {
   // 算出 privateKey
   var privateKey = keythereum.recover(user_password, keyObject);
 
-  // LockPay = LockPay.at(contract_address);
+  var LockPayshow = eth.contract(contract_abi).at(contract_address);
 
   // console.log(LockPay)
-  const contractData = LockPay.book.getData(user_address, {
+  const contractData = LockPayshow.book.getData(user_address, {
     data: contract_bytecode
   });
 
