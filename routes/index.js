@@ -82,7 +82,7 @@ router.get('/host', function (req, res) {
 })
 
 router.get('/travel', function (req, res) {
-  var todo = doquery("select * from items where status = 1")
+  var todo = doquery("select * from items where status = 1 order by id desc")
   todo.then(input => {
     res.render('travel', {
       title: "travel",
