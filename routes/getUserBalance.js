@@ -9,7 +9,7 @@ function getBalance(user_address) {
   console.log(user_balance)
 
   var temp = new Number(user_balance)
-  temp = temp.toFixed(4).toString()
+  temp = temp.toFixed(2).toString()
   
   console.log(temp)
   return temp;

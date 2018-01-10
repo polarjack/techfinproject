@@ -33,10 +33,9 @@ contract LockPay {
     ifbook = true;
   }
 
-  function cancel() public {
-    require(msg.sender == user);
+  function cancelOrder() public {
     ifbook = false;
-
+    
     user.transfer(userPay);
     user = 0x0;
   }

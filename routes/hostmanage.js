@@ -1,18 +1,18 @@
 var express = require("express");
 var router = express.Router();
-var path = require("path")
+var path = require("path");
 
 var doquery = require("../config/dbconfig");
 var Web3 = require("../config/web3");
 var eth = Web3.eth;
 // var deployContract = require('')
 
-var getBalance = require("./getUserBalance")
+var getBalance = require("./getUserBalance");
 
 var LockPay = require("./lockpay");
 
 //middleware
-router.use("/", function (req, res, next) {
+router.use("/", function(req, res, next) {
   // const todo = doquery(
   //   "select * from users where account = ? && password = ?",
   //   ["fuckinggod", "123456"]
@@ -31,7 +31,7 @@ router.use("/", function (req, res, next) {
   //   }
   //   next();
   // });
-  
+
   if (req.session.login != "hidden") {
     res.redirect("../login");
   } else {
@@ -41,14 +41,21 @@ router.use("/", function (req, res, next) {
   }
 });
 
-router.get("/", function (req, res) {
+router.get("/", function(req, res) {
   res.redirect("/hostmanage/mylist");
 });
 
-router.get("/mylist", function (req, res) {
-  var todo = doquery("select * from items where owner = " + req.session.user_id, "");
+router.get("/mylist", function(req, res) {
+  var todo = doquery(
+    "select * from items where owner = " + req.session.user_id,
+    ""
+  );
 
   todo.then(input => {
+    input.map((value, index) => {
+      value.inside_balance = getBalance(value.contract_address);
+    });
+
     res.render("hostmanage/mylist", {
       title: "hostmanage mylist",
       login: req.session.login,
@@ -56,10 +63,10 @@ router.get("/mylist", function (req, res) {
 
       balance: req.session.user_balance
     });
-  })
+  });
 });
 
-router.get("/insert", function (req, res) {
+router.get("/insert", function(req, res) {
   res.render("hostmanage/iteminsert", {
     title: "hostmanage insert",
     login: req.session.login,
@@ -68,8 +75,7 @@ router.get("/insert", function (req, res) {
   });
 });
 
-router.post("/iteminsertdo", function (req, res) {
-
+router.post("/iteminsertdo", function(req, res) {
   var user_id = req.session.user_id;
   var user_address = req.session.user_address;
   var user_password = req.body.password;
@@ -78,15 +84,14 @@ router.post("/iteminsertdo", function (req, res) {
   // console.log(image.name)
 
   var basepath = path.dirname(require.main.filename);
-  
-  image.mv(basepath + '/public/images/' + image.name, function(err) {
-    if(!err) {
-      console.log("done")
+
+  image.mv(basepath + "/public/images/" + image.name, function(err) {
+    if (!err) {
+      console.log("done");
+    } else {
+      console.log(err);
     }
-    else {
-      console.log(err)
-    }
-  })
+  });
 
   var data = {
     item_name: req.body.itemName,
@@ -98,7 +103,7 @@ router.post("/iteminsertdo", function (req, res) {
     image: image.name
   };
 
-  console.log(data)
+  console.log(data);
   // var todo = doquery("insert into items into ?", data);
 
   var txhash = LockPay.deploy(
@@ -107,38 +112,40 @@ router.post("/iteminsertdo", function (req, res) {
     data.price_perday
   );
 
-  data.start_date = new Date(data.start_date)
-  data.end_date = new Date(data.end_date)
+  data.start_date = new Date(data.start_date);
+  data.end_date = new Date(data.end_date);
 
-  setTimeout(function () {
+  setTimeout(function() {
     var receipt = Web3.eth.getTransactionReceipt(txhash);
     data.contract_address = receipt.contractAddress;
     data.block_number = receipt.blockNumber;
     data.gas_used = receipt.gasUsed;
     data.balance = eth.getBalance(receipt.contractAddress).toString();
 
-    console.log(data);
+    // console.log(data);
 
-    // var todo = doquery("insert into items set ?", data);
-    // todo.then(input => {
-    //   console.log(input)
-    // }).catch(input => {
-    //   console.log(input)
-    // })
-  }, 7000)
+    var todo = doquery("insert into items set ?", data);
+    todo
+      .then(input => {
+        console.log(input);
+      })
+      .catch(input => {
+        console.log(input);
+      });
+  }, 7000);
 
   // setTimeout(function () {
   //   res.redirect("mylist")
   // }, 6000)
-  res.send("done")
-  // res.redirect("mylist")
+  // res.send("done")
+  res.redirect("mylist");
 });
 
-router.get("/showsession", function (req, res) {
+router.get("/showsession", function(req, res) {
   res.json(req.session);
 });
 
-router.get("/testweb3", function (req, res) {
+router.get("/testweb3", function(req, res) {
   var coinbase = eth.coinbase;
   var coinbaseBalance = eth.getBalance(coinbase);
   console.log(coinbase);
@@ -190,13 +197,13 @@ router.get("/testweb3", function (req, res) {
 //   });
 // });
 
-router.get("/sendmoney", function (req, res) {
+router.get("/sendmoney", function(req, res) {
   req.session.address = "0xee47120e0af5e54b18c91d37ee1788c5f66e82b0";
   var user_address = req.session.address;
   var txhash = chain.sendMoney(req.session.address);
   txhash = txhash.toString();
   console.log(txhash);
-  setTimeout(function () {
+  setTimeout(function() {
     var receipt = Web3.eth.getTransaction(txhash);
     // console.log("after timeout")
     // console.log(txhash)
