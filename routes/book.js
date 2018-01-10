@@ -131,7 +131,6 @@ router.get("/list", (req, res) => {
         title: "My Order",
         login: req.session.login,
         data: input,
-
         balance: req.session.user_balance
       });
     })

@@ -58,7 +58,7 @@
                           <button class="btn waves-effect right red" onclick="cancel('<%=i.user_address%>', '<%=i.contract_address%>')">Cancel</button>
                         </div>
                         <div class="col s2">
-                          <button class="btn waves-effect right" onclick="opendoor('<%=i.user_address%>', '<%=i.contract_address%>')">Open Lock</button>
+                          <button class="btn waves-effect right" onclick="version2('<%=i.user_address%>', '<%=i.contract_address%>')">Open Lock</button>
                         </div>
                       </div>
                     </div>
@@ -123,7 +123,7 @@
   
   function version2(a, b) {
     console.log("here")
-    $.get("http://140.119.164.140:8080/lock/unlocktwo", function(data) {
+    $.get("http://192.168.1.129:8080/lock/unlocktwo", function(data) {
       console.log(data)
     })
   }
