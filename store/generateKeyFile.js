@@ -3,12 +3,11 @@ var path = require('path');
 
 var appDir = path.dirname(require.main.filename);
 
-function getNewAccount(_password) {
+function getNewAccount(_password) { // input password can be empty
   var params = { keyBytes: 32, ivBytes: 16 };
   var dk = keythereum.create(params);
-
-  var kdf = "pbkdf2";
-
+  
+  // key prameters
   var options = {
     kdf: "pbkdf2",
     cipher: "aes-128-ctr",
@@ -36,7 +35,7 @@ function getNewAccount(_password) {
 
   const outputFilePath = appDir + '/store/keystore'; //fix the path so keythereum don't panic
 
-  keythereum.exportToFile(keyObject, outputFilePath)
+  keythereum.exportToFile(keyObject, outputFilePath) // output keyfile
   
   console.log("after")
   if(typeof output.address == undefined || output.address == '0x' || output.address == '') {
